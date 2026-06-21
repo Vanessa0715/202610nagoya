@@ -457,11 +457,32 @@ export default function Itinerary() {
                   </div>
                 )}
 
+                {viewItem.tag === '住宿' && (
+                  <div className="mb-8 bg-white border border-gray-100 p-4 rounded-sm shadow-sm">
+                    <p className="text-[0.58rem] text-[#B29D82] tracking-[0.2em] uppercase font-bold mb-3">住宿憑證（Vouchers）</p>
+                    <p className="text-[0.78rem] text-gray-400 text-center py-3 italic">尚未上傳憑證</p>
+                    <button
+                      onClick={() => alert('PDF 上傳功能即將推出，請先將訂房確認信儲存於手機相簿 🙏')}
+                      className="w-full mt-1 py-2.5 border border-dashed border-[#D4C8B8] text-[#A5998A] rounded-sm text-[0.75rem] tracking-widest hover:bg-[#F8F7F4] transition-colors"
+                    >
+                      ＋ 上傳 PDF
+                    </button>
+                  </div>
+                )}
+
+                {(viewItem.phone || viewItem.notes || viewItem.details) && (
+                  <div className="flex items-center gap-2 mb-5">
+                    <span className="text-[#A5998A] text-xs">ⓘ</span>
+                    <span className="text-[0.6rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold">關於此處（About）</span>
+                    <div className="flex-1 h-[1px] bg-gray-100" />
+                  </div>
+                )}
+
                 {viewItem.phone && (
                   <div className="mb-6 bg-white border border-gray-100 p-4 rounded-sm shadow-sm flex items-center gap-4">
                     <span className="text-[#A5998A] text-xl">📞</span>
                     <div>
-                      <p className="text-[0.55rem] text-[#A5998A] tracking-[0.2em] uppercase mb-0.5 font-bold">Phone</p>
+                      <p className="text-[0.55rem] text-[#A5998A] tracking-[0.2em] uppercase mb-0.5 font-bold">Phone / GPS</p>
                       <p className="font-mono font-bold text-lg text-[#222] tracking-wider">{viewItem.phone}</p>
                     </div>
                   </div>
