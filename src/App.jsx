@@ -3,12 +3,14 @@ import Itinerary from './components/Itinerary'
 import Budget from './components/Budget'
 import Packing from './components/Packing'
 import Spots from './components/Spots'
+import Tools from './components/Tools'
 
 const TABS = [
   { id: 'itinerary', label: '行程' },
   { id: 'budget',    label: '預算' },
   { id: 'packing',   label: '打包' },
   { id: 'spots',     label: '景點' },
+  { id: 'tools',     label: '工具' },
 ]
 
 export default function App() {
@@ -32,6 +34,7 @@ export default function App() {
         {tab === 'budget'    && <Budget />}
         {tab === 'packing'   && <Packing />}
         {tab === 'spots'     && <Spots />}
+        {tab === 'tools'     && <Tools />}
       </main>
 
       {/* Bottom nav */}

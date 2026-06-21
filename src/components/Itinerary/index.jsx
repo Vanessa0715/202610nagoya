@@ -347,26 +347,44 @@ export default function Itinerary() {
       {!loading && items.length > 0 && (
         <div className="fixed bottom-14 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-20 pointer-events-none">
           <div className="bg-[#FDFCFB]/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-3 flex items-stretch pointer-events-auto">
+            {/* GPS OFF */}
+            <div className="flex flex-col items-center justify-center px-3 border-r border-gray-200/80 shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A5998A" strokeWidth="1.5" className="mb-1">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="22" y1="2" x2="2" y2="22" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <span className="text-[0.5rem] text-[#A5998A] font-bold tracking-widest leading-none mt-0.5 text-center">GPS<br/>OFF</span>
+            </div>
+            {/* Current event */}
             <div
-              className="flex-1 px-2 cursor-pointer active:opacity-70 transition-opacity"
+              className="flex-1 px-4 flex flex-col justify-center min-w-0 cursor-pointer active:opacity-70 transition-opacity"
               onClick={() => openView(items[0])}
             >
-              <p className="text-[0.52rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold">Now</p>
-              <p className="font-serif font-bold text-[#222] text-sm mt-0.5 truncate">{items[0].title}</p>
-              <p className="text-[0.68rem] text-[#999] font-mono mt-0.5">{items[0].time || '--:--'}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-serif text-xl font-bold text-[#222] leading-none">{items[0].time || '--:--'}</span>
+                <span className="text-[0.5rem] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded tracking-widest shrink-0">行程預覽</span>
+              </div>
+              <p className="font-serif font-bold text-[#222] text-[0.88rem] truncate mb-0.5">{items[0].title}</p>
+              {items[1] && (
+                <p className="text-[0.62rem] text-gray-500 truncate flex items-center gap-1">
+                  <span className="text-gray-400">→</span> {items[1].title}
+                </p>
+              )}
             </div>
+            {/* Next time */}
             {items[1] && (
-              <>
-                <div className="w-[1px] bg-gray-100 mx-1 self-stretch" />
-                <div
-                  className="flex-1 px-2 cursor-pointer active:opacity-70 transition-opacity"
-                  onClick={() => openView(items[1])}
-                >
-                  <p className="text-[0.52rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold">Next</p>
-                  <p className="font-serif font-bold text-[#222] text-sm mt-0.5 truncate">{items[1].title}</p>
-                  <p className="text-[0.68rem] text-[#999] font-mono mt-0.5">{items[1].time || '--:--'}</p>
-                </div>
-              </>
+              <div
+                className="flex flex-col items-center justify-center px-3 border-l border-gray-200/80 shrink-0 min-w-[64px] cursor-pointer active:opacity-70 transition-opacity"
+                onClick={() => openView(items[1])}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" className="mb-1">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span className="font-serif font-bold text-[#222] text-base leading-none">{items[1].time || '--:--'}</span>
+                <span className="text-[0.5rem] text-gray-500 tracking-widest mt-1">下個時間</span>
+              </div>
             )}
           </div>
         </div>
@@ -431,9 +449,10 @@ export default function Itinerary() {
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#D4C8B8]" />
                     <p className="text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-2">Reservation</p>
                     <p className="font-serif font-bold text-lg text-[#222]">{viewItem.title}</p>
-                    <div className="border-t border-dashed border-[#EBE7DF] pt-4 mt-4">
+                    <div className="border-t border-dashed border-[#EBE7DF] pt-4 mt-4 relative pb-2">
                       <p className="text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">Confirmation No.</p>
                       <p className="font-mono text-xl font-bold text-[#333] tracking-widest">{viewItem.reservationNo}</p>
+                      <div className="stamp-tag">訂單代號</div>
                     </div>
                   </div>
                 )}

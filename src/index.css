@@ -38,3 +38,18 @@ body {
 
 .animate-fade-in  { animation: fadeIn  0.35s ease-out forwards; }
 .animate-slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.stamp-tag {
+  position: absolute;
+  right: 8px;
+  bottom: -6px;
+  border: 1px solid #8B2C2C;
+  color: #8B2C2C;
+  transform: rotate(-5deg);
+  padding: 2px 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.05em;
+}
