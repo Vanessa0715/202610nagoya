@@ -4,17 +4,17 @@ import { db } from '../../firebase'
 
 const DAY_DATA = [
   { week: 'THU', date: '10/01', subtitle: '名古屋', desc: '開啟自駕的序幕',
-    image: 'https://images.pexels.com/photos/1105085/pexels-photo-1105085.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day1.jpg` },
   { week: 'FRI', date: '10/02', subtitle: '馬籠宿・高山', desc: '走進江戶時代',
-    image: 'https://images.pexels.com/photos/402028/pexels-photo-402028.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day2.jpg` },
   { week: 'SAT', date: '10/03', subtitle: '上高地・新穗高', desc: '神明降臨的阿爾卑斯',
-    image: 'https://images.pexels.com/photos/3408354/pexels-photo-3408354.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day3.jpg` },
   { week: 'SUN', date: '10/04', subtitle: '白川鄉・高山', desc: '探訪合掌村',
-    image: 'https://images.pexels.com/photos/2087391/pexels-photo-2087391.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day4.jpg` },
   { week: 'MON', date: '10/05', subtitle: '金澤', desc: '加賀百萬石榮華',
-    image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day5.jpg` },
   { week: 'TUE', date: '10/06', subtitle: '返家之旅', desc: '滿載回憶',
-    image: 'https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    image: `${import.meta.env.BASE_URL}images/day6.jpg` },
 ]
 
 const CN_NUMS = ['一', '二', '三', '四', '五', '六']
