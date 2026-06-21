@@ -48,12 +48,12 @@ https://www.notion.so/vanessa0715/a11610d27627835089d581fe63738df9
 ## 部署設定
 
 - **平台：** GitHub Pages
-- **Repo：** 待建立（名稱需為 `202610nagoya` 以對應 base path）
+- **Repo：** `Vanessa0715/202610nagoya`
 - **CI/CD：** `.github/workflows/deploy.yml`，push to `main` 自動 build & deploy
-- **發布網址：** `https://<github-username>.github.io/202610nagoya/`
+- **發布網址：** https://vanessa0715.github.io/202610nagoya/
 - **base path：** `vite.config.js` 已設 `base: '/202610nagoya/'`
-- **GitHub Secrets 需設定：** 7 個 `VITE_FIREBASE_*` 環境變數（Settings → Secrets → Actions）
-- **啟用 GitHub Pages：** Repo Settings → Pages → Source: GitHub Actions
+- **GitHub Secrets：** 7 個 `VITE_FIREBASE_*` 已設定完成
+- **GitHub Pages：** 已啟用（Source: GitHub Actions）
 
 ## 注意事項
 
