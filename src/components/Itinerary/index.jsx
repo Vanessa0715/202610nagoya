@@ -4,17 +4,23 @@ import { db } from '../../firebase'
 
 const DAY_DATA = [
   { week: 'THU', date: '10/01', subtitle: '名古屋', desc: '開啟自駕的序幕',
-    image: `${import.meta.env.BASE_URL}images/day1.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day1.jpg`,
+    lat: 35.1815, lon: 136.9066 },
   { week: 'FRI', date: '10/02', subtitle: '馬籠宿・高山', desc: '走進江戶時代',
-    image: `${import.meta.env.BASE_URL}images/day2.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day2.jpg`,
+    lat: 36.1408, lon: 137.2523 },
   { week: 'SAT', date: '10/03', subtitle: '上高地・新穗高', desc: '神明降臨的阿爾卑斯',
-    image: `${import.meta.env.BASE_URL}images/day3.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day3.jpg`,
+    lat: 36.2453, lon: 137.6156 },
   { week: 'SUN', date: '10/04', subtitle: '白川鄉・高山', desc: '探訪合掌村',
-    image: `${import.meta.env.BASE_URL}images/day4.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day4.jpg`,
+    lat: 36.2575, lon: 136.9062 },
   { week: 'MON', date: '10/05', subtitle: '金澤', desc: '加賀百萬石榮華',
-    image: `${import.meta.env.BASE_URL}images/day5.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day5.jpg`,
+    lat: 36.5944, lon: 136.6256 },
   { week: 'TUE', date: '10/06', subtitle: '返家之旅', desc: '滿載回憶',
-    image: `${import.meta.env.BASE_URL}images/day6.jpg` },
+    image: `${import.meta.env.BASE_URL}images/day6.jpg`,
+    lat: 35.1815, lon: 136.9066 },
 ]
 
 const CN_NUMS = ['一', '二', '三', '四', '五', '六']
@@ -36,6 +42,113 @@ const getTagStyle = (tag) => {
     備案:     'text-[#999] border-[#999]/40 bg-[#999]/5',
   }
   return map[tag] || 'text-gray-400 border-gray-200 bg-gray-50'
+}
+
+function getWeatherEmoji(code) {
+  if (code === 0) return '☀️'
+  if (code === 1) return '🌤️'
+  if (code === 2) return '⛅'
+  if (code === 3) return '☁️'
+  if (code <= 48) return '🌫️'
+  if (code <= 55) return '🌦️'
+  if (code <= 67) return '🌧️'
+  if (code <= 77) return '🌨️'
+  if (code <= 82) return '🌧️'
+  return '⛈️'
+}
+
+function getOutfit(temp) {
+  if (temp >= 28) return { icon: '👕', text: '炎熱，短袖輕便出行，做好防曬補水' }
+  if (temp >= 24) return { icon: '🧢', text: '微熱舒適，短袖為主，薄外套備用即可' }
+  if (temp >= 20) return { icon: '🧥', text: '微涼舒適，建議穿著短袖或薄長袖，搭配輕薄小外套即可' }
+  if (temp >= 15) return { icon: '🧥', text: '偏涼，長袖加外套，注意早晚溫差' }
+  if (temp >= 10) return { icon: '🧤', text: '頗冷，外套必備，可備毛衣或厚外套' }
+  return { icon: '🧣', text: '寒冷！需要厚外套或羽絨衣，別忘圍巾手套' }
+}
+
+function useWeather(lat, lon) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    setData(null)
+    fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&hourly=temperature_2m,weathercode&current_weather=true` +
+      `&timezone=Asia%2FTokyo&forecast_days=2`
+    )
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [lat, lon])
+
+  return { data, loading }
+}
+
+function WeatherWidget({ lat, lon }) {
+  const { data, loading } = useWeather(lat, lon)
+  const [open, setOpen] = useState(false)
+
+  if (loading) {
+    return (
+      <div className="mx-5 mb-4 h-20 bg-[#F7F5F0] rounded-sm animate-pulse" />
+    )
+  }
+  if (!data?.hourly || !data?.current_weather) return null
+
+  // current_weather.time may include minutes ("2026-06-21T18:15"); hourly array is whole-hour only
+  const currentHourStr = data.current_weather.time.slice(0, 13) + ':00'
+  const startIdx = data.hourly.time.indexOf(currentHourStr)
+  if (startIdx < 0) return null
+
+  const slots = Array.from({ length: 5 }, (_, i) => {
+    const idx = startIdx + i
+    if (idx >= data.hourly.time.length) return null
+    const hourStr = data.hourly.time[idx].split('T')[1].slice(0, 5)
+    return {
+      label: i === 0 ? '現在' : hourStr,
+      emoji: getWeatherEmoji(data.hourly.weathercode[idx]),
+      temp: Math.round(data.hourly.temperature_2m[idx]),
+    }
+  }).filter(Boolean)
+
+  const currentTemp = slots[0]?.temp ?? Math.round(data.current_weather.temperature)
+  const outfit = getOutfit(currentTemp)
+
+  return (
+    <div className="mx-5 mb-4">
+      {/* Hourly strip — always visible, tap to toggle detail */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex justify-between items-center px-4 py-3 bg-[#F7F5F0] rounded-sm border border-[#EBE7DF] active:opacity-80 transition-opacity"
+      >
+        {slots.map((s, i) => (
+          <div key={i} className="flex flex-col items-center gap-1">
+            <span className={`text-[0.58rem] tracking-wider ${i === 0 ? 'text-[#8B2C2C] font-bold' : 'text-[#A5998A]'}`}>
+              {s.label}
+            </span>
+            <span className="text-xl leading-none">{s.emoji}</span>
+            <span className={`text-sm font-bold leading-none ${i === 0 ? 'text-[#222]' : 'text-[#555]'}`}>
+              {s.temp}°
+            </span>
+          </div>
+        ))}
+        <span className="text-[#C5BAA8] text-xs ml-1">{open ? '▲' : '▼'}</span>
+      </button>
+
+      {/* Expandable outfit guide */}
+      {open && (
+        <div className="mt-1.5 flex items-start gap-3 bg-[#F7F5F0] border border-[#EBE7DF] rounded-sm px-4 py-3 animate-fade-in">
+          <span className="text-2xl mt-0.5 shrink-0">{outfit.icon}</span>
+          <div>
+            <p className="text-[0.52rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-1">Outfit Guide</p>
+            <p className="text-[0.82rem] text-[#555] leading-relaxed">{outfit.text}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 const EMPTY_FORM = {
@@ -119,7 +232,7 @@ export default function Itinerary() {
   return (
     <div>
       {/* Day selector */}
-      <div className="flex justify-between px-6 py-4 border-b border-gray-100">
+      <div className="sticky top-[90px] z-10 bg-[#FDFCFB] flex justify-between px-6 py-4 border-b border-gray-100">
         {DAY_DATA.map((d, i) => (
           <button
             key={i}
@@ -172,6 +285,9 @@ export default function Itinerary() {
           </div>
         </div>
       </div>
+
+      {/* Weather widget */}
+      <WeatherWidget lat={day.lat} lon={day.lon} />
 
       {/* Timeline */}
       <div className="px-5 pb-44">
