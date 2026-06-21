@@ -4,7 +4,7 @@
 
 **旅遊日期：** 2026/10/01–10/06（6天5夜）
 **目的地：** 名古屋 → 高山
-**成員：** 思菡、俊毅、金燕、國峯、安安（共5人）
+**成員：** 思菡、俊毅、金燕、國峯、心慈、思穎、渝翔（共7人）
 **用途：** 家人共同編輯行程的 Web App，透過 Firebase 即時同步
 
 ## 技術棧
@@ -54,6 +54,33 @@ https://www.notion.so/vanessa0715/a11610d27627835089d581fe63738df9
 - **base path：** `vite.config.js` 已設 `base: '/202610nagoya/'`
 - **GitHub Secrets：** 7 個 `VITE_FIREBASE_*` 已設定完成
 - **GitHub Pages：** 已啟用（Source: GitHub Actions）
+
+## 原始碼對應區塊
+
+| 想改的區塊 | 檔案路徑 |
+|-----------|---------|
+| 每日行程 | `src/components/Itinerary/index.jsx` |
+| 預算追蹤 | `src/components/Budget/index.jsx` |
+| 打包清單 | `src/components/Packing/index.jsx` |
+| 景點卡片 | `src/components/Spots/index.jsx` |
+| 整體版面／導覽 | `src/App.jsx` |
+| 全域樣式 | `src/App.css` / `src/index.css` |
+
+> 資料（行程內容、清單項目等）存在 Firebase，直接在網頁上操作即可，不需要改程式碼。
+
+## 本地開發流程
+
+```bash
+# 每次開工跑一次，之後存檔會自動熱更新
+npm run dev
+# → 開瀏覽器看 http://localhost:5173/202610nagoya/（port 可能不同）
+```
+
+確認沒問題後：
+```bash
+git add . && git commit -m "訊息" && git push
+# → GitHub Actions 自動 build & deploy 到 github.io
+```
 
 ## 注意事項
 

@@ -4,7 +4,7 @@ import { db } from '../../firebase'
 import { Plus, X, Trash2 } from 'lucide-react'
 
 const CATEGORIES = ['交通', '住宿', '餐食', '購物', '票券']
-const MEMBERS = ['思菡', '俊毅', '金燕', '國峯', '安安', '公共']
+const MEMBERS = ['思菡', '俊毅', '金燕', '國峯', '心慈', '思穎', '渝翔', '公共']
 const DATES = Array.from({ length: 6 }, (_, i) => `10/${String(i + 1).padStart(2, '0')}`)
 
 const CAT_STYLE = {
@@ -74,7 +74,7 @@ export default function Budget() {
       <div className="mx-4 mt-4 rounded-3xl bg-nagoya-red text-white px-5 py-5 shadow-lg">
         <p className="text-xs opacity-70 font-medium tracking-wide uppercase">總支出</p>
         <p className="text-4xl font-bold mt-1">¥{total.toLocaleString()}</p>
-        <p className="text-xs opacity-60 mt-1">5人均攤 約 ¥{Math.round(total / 5).toLocaleString()} / 人</p>
+        <p className="text-xs opacity-60 mt-1">7人均攤 約 ¥{Math.round(total / 7).toLocaleString()} / 人</p>
 
         <div className="mt-4 grid grid-cols-5 gap-1.5">
           {CATEGORIES.map(cat => (

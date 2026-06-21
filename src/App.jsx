@@ -1,50 +1,53 @@
 import { useState } from 'react'
-import { Calendar, Wallet, Package, MapPin } from 'lucide-react'
 import Itinerary from './components/Itinerary'
 import Budget from './components/Budget'
 import Packing from './components/Packing'
 import Spots from './components/Spots'
 
 const TABS = [
-  { id: 'itinerary', label: '行程', icon: Calendar },
-  { id: 'budget', label: '預算', icon: Wallet },
-  { id: 'packing', label: '打包', icon: Package },
-  { id: 'spots', label: '景點', icon: MapPin },
+  { id: 'itinerary', label: '行程' },
+  { id: 'budget',    label: '預算' },
+  { id: 'packing',   label: '打包' },
+  { id: 'spots',     label: '景點' },
 ]
 
 export default function App() {
   const [tab, setTab] = useState('itinerary')
 
   return (
-    <div className="min-h-screen bg-cream flex flex-col max-w-md mx-auto">
-      <header className="sticky top-0 z-10 bg-nagoya-red text-white px-4 pt-4 pb-3 shadow-md">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-lg font-bold tracking-wide">名古屋・高山</h1>
-            <p className="text-xs text-red-200 mt-0.5">10/01–10/06 · 2026 · 五人同行</p>
-          </div>
-          <span className="text-2xl mt-0.5">🍁</span>
-        </div>
+    <div className="max-w-md mx-auto bg-[#FDFCFB] min-h-screen text-[#333]">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-[#FDFCFB] px-5 pt-8 pb-3 flex flex-col items-center">
+        <h1 className="font-serif text-[1.3rem] font-bold tracking-widest text-[#222]">
+          🏔️ 10月中部旅行
+        </h1>
+        <span className="mt-1 border border-[#E0DCD0] bg-[#F7F5F0] rounded-full px-2.5 py-0.5 text-[0.55rem] text-[#888] tracking-widest shadow-sm">
+          2026/10/01–10/06 · 七人同行
+        </span>
       </header>
 
-      <main className="flex-1 overflow-y-auto pb-20">
+      {/* Main content */}
+      <main>
         {tab === 'itinerary' && <Itinerary />}
-        {tab === 'budget' && <Budget />}
-        {tab === 'packing' && <Packing />}
-        {tab === 'spots' && <Spots />}
+        {tab === 'budget'    && <Budget />}
+        {tab === 'packing'   && <Packing />}
+        {tab === 'spots'     && <Spots />}
       </main>
 
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-stone-100 flex shadow-lg">
-        {TABS.map(({ id, label, icon: Icon }) => (
+      {/* Bottom nav */}
+      <nav
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-[#FDFCFB]/90 backdrop-blur-md border-t border-gray-100 px-8 py-3 flex justify-between items-center z-30"
+        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
+      >
+        {TABS.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-colors ${
-              tab === id ? 'text-nagoya-red' : 'text-stone-400'
+            className={`text-xs tracking-widest uppercase transition-all ${
+              tab === id ? 'text-[#222] font-bold' : 'text-gray-400'
             }`}
           >
-            <Icon size={20} strokeWidth={tab === id ? 2.5 : 1.75} />
-            <span className="text-[11px] font-medium">{label}</span>
+            {label}
           </button>
         ))}
       </nav>
