@@ -92,7 +92,7 @@ function WeatherWidget({ lat, lon }) {
 
   if (loading) {
     return (
-      <div className="mx-5 mb-4 h-20 bg-[#F7F5F0] rounded-sm animate-pulse" />
+      <div className="mx-5 md:mx-0 mb-4 h-20 bg-[#F7F5F0] rounded-sm animate-pulse" />
     )
   }
   if (!data?.hourly || !data?.current_weather) return null
@@ -117,7 +117,7 @@ function WeatherWidget({ lat, lon }) {
   const outfit = getOutfit(currentTemp)
 
   return (
-    <div className="mx-5 mb-4">
+    <div className="mx-5 md:mx-0 mb-4">
       {/* Hourly strip — always visible, tap to toggle detail */}
       <button
         onClick={() => setOpen(v => !v)}
@@ -232,7 +232,7 @@ export default function Itinerary() {
   return (
     <div>
       {/* Day selector */}
-      <div className="sticky top-[90px] z-10 bg-[#FDFCFB] flex justify-between px-6 py-4 border-b border-gray-100">
+      <div className="sticky top-[90px] md:top-[72px] z-10 bg-[#FDFCFB] flex justify-between md:justify-center md:gap-14 px-6 py-4 border-b border-gray-100">
         {DAY_DATA.map((d, i) => (
           <button
             key={i}
@@ -256,8 +256,11 @@ export default function Itinerary() {
         ))}
       </div>
 
+      {/* Desktop: two-column layout (hero + weather | timeline) */}
+      <div className="md:grid md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10 md:px-8 md:pt-6 md:items-start">
+      <div className="md:sticky md:top-[150px]">
       {/* Hero image */}
-      <div className="px-5 py-4 flex gap-4 items-stretch" style={{ height: '13rem' }}>
+      <div className="px-5 md:px-0 py-4 md:pt-0 flex gap-4 items-stretch h-52 md:h-80">
         <div className="flex items-center justify-center w-6 shrink-0">
           <span
             className="font-serif text-[1.1rem] font-bold tracking-widest text-[#222]"
@@ -288,9 +291,10 @@ export default function Itinerary() {
 
       {/* Weather widget */}
       <WeatherWidget lat={day.lat} lon={day.lon} />
+      </div>
 
       {/* Timeline */}
-      <div className="px-5 pb-44">
+      <div className="px-5 md:px-0 pb-44 md:pb-32">
         {loading ? (
           <div className="text-center text-gray-300 py-16 text-sm tracking-widest">Loading...</div>
         ) : items.length === 0 ? (
@@ -342,10 +346,11 @@ export default function Itinerary() {
           + 新增行程
         </button>
       </div>
+      </div>
 
       {/* Floating bottom card */}
       {!loading && items.length > 0 && (
-        <div className="fixed bottom-14 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-20 pointer-events-none">
+        <div className="fixed bottom-14 md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-2xl px-4 z-20 pointer-events-none">
           <div className="bg-[#FDFCFB]/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-3 flex items-stretch pointer-events-auto">
             {/* GPS OFF */}
             <div className="flex flex-col items-center justify-center px-3 border-r border-gray-200/80 shrink-0">
@@ -393,11 +398,11 @@ export default function Itinerary() {
       {/* Modal overlay */}
       {viewItem && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in"
           onClick={closeModal}
         >
           <div
-            className="bg-[#FDFCFB] w-full max-w-md rounded-t-2xl overflow-hidden flex flex-col animate-slide-up shadow-2xl relative"
+            className="bg-[#FDFCFB] w-full max-w-md md:max-w-lg rounded-t-2xl md:rounded-2xl overflow-hidden flex flex-col animate-slide-up shadow-2xl relative"
             style={{ maxHeight: '88vh' }}
             onClick={e => e.stopPropagation()}
           >

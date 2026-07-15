@@ -71,7 +71,7 @@ export default function Spots() {
   return (
     <div className="pb-6">
       {/* Filter */}
-      <div className="flex gap-2 px-4 py-4 overflow-x-auto no-scrollbar">
+      <div className="flex gap-2 px-4 md:px-8 py-4 md:py-5 overflow-x-auto no-scrollbar">
         {['全部', ...SPOT_TAGS].map(tag => (
           <button
             key={tag}
@@ -86,7 +86,7 @@ export default function Spots() {
       </div>
 
       {/* Spots Grid */}
-      <div className="px-4">
+      <div className="px-4 md:px-8">
         {loading ? (
           <p className="text-center text-stone-300 text-sm py-10">載入中⋯</p>
         ) : filtered.length === 0 ? (
@@ -96,7 +96,7 @@ export default function Spots() {
             <p className="text-xs mt-1">點右下角 ＋ 開始收藏</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {filtered.map(spot => (
               <div key={spot.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-stone-100 relative flex flex-col">
                 <button
@@ -146,7 +146,7 @@ export default function Spots() {
       {/* FAB */}
       <button
         onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 bg-nagoya-red text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-nagoya-red text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
         style={{ width: 52, height: 52 }}
       >
         <Plus size={24} />
@@ -154,10 +154,10 @@ export default function Spots() {
 
       {/* Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-white rounded-t-3xl px-5 pt-5 pb-8 max-h-[85vh] overflow-y-auto">
-            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5" />
+          <div className="relative bg-white rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8 max-h-[85vh] overflow-y-auto">
+            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-800">新增景點</h3>
               <button onClick={() => setModal(false)} className="text-stone-300 hover:text-stone-500">

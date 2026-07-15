@@ -65,7 +65,7 @@ export default function Packing() {
   return (
     <div className="pb-6">
       {/* Progress Card */}
-      <div className="mx-4 mt-4 bg-white rounded-3xl px-5 py-4 shadow-sm border border-stone-100">
+      <div className="mx-4 md:mx-8 mt-4 md:mt-6 bg-white rounded-3xl px-5 py-4 shadow-sm border border-stone-100">
         <div className="flex items-center justify-between mb-2.5">
           <span className="text-sm font-semibold text-stone-700">打包進度</span>
           <span className={`text-sm font-bold ${allDone ? 'text-matcha' : 'text-stone-500'}`}>
@@ -87,7 +87,9 @@ export default function Packing() {
       </div>
 
       {/* Checklist Groups */}
-      <div className="px-4 mt-4 space-y-5 pb-4">
+      <div className={`px-4 md:px-8 mt-4 md:mt-6 space-y-5 pb-4 ${
+        !loading && total > 0 ? 'md:space-y-0 md:columns-2 md:gap-x-8' : ''
+      }`}>
         {loading ? (
           <p className="text-center text-stone-300 text-sm py-10">載入中⋯</p>
         ) : total === 0 ? (
@@ -99,7 +101,7 @@ export default function Packing() {
         ) : (
           allCats.map(cat =>
             grouped[cat]?.length > 0 ? (
-              <div key={cat}>
+              <div key={cat} className="md:mb-6 md:break-inside-avoid">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xs font-semibold text-stone-400 uppercase tracking-widest">{cat}</span>
                   <span className="text-[10px] text-stone-300">
@@ -143,7 +145,7 @@ export default function Packing() {
       {/* FAB */}
       <button
         onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 bg-matcha text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-matcha text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
         style={{ width: 52, height: 52 }}
       >
         <Plus size={24} />
@@ -151,10 +153,10 @@ export default function Packing() {
 
       {/* Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-white rounded-t-3xl px-5 pt-5 pb-8">
-            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5" />
+          <div className="relative bg-white rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
+            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-800">新增物品</h3>
               <button onClick={() => setModal(false)} className="text-stone-300 hover:text-stone-500">

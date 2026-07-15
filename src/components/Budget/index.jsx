@@ -70,8 +70,11 @@ export default function Budget() {
 
   return (
     <div className="pb-6">
+      {/* Desktop: two-column layout (summary | list) */}
+      <div className="md:grid md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-8 md:px-8 md:pt-6 md:items-start">
+      <div className="md:sticky md:top-[88px]">
       {/* Summary Card */}
-      <div className="mx-4 mt-4 rounded-3xl bg-nagoya-red text-white px-5 py-5 shadow-lg">
+      <div className="mx-4 md:mx-0 mt-4 md:mt-0 rounded-3xl bg-nagoya-red text-white px-5 py-5 shadow-lg">
         <p className="text-xs opacity-70 font-medium tracking-wide uppercase">總支出</p>
         <p className="text-4xl font-bold mt-1">¥{total.toLocaleString()}</p>
         <p className="text-xs opacity-60 mt-1">7人均攤 約 ¥{Math.round(total / 7).toLocaleString()} / 人</p>
@@ -86,8 +89,11 @@ export default function Budget() {
         </div>
       </div>
 
+      </div>
+
+      <div>
       {/* Filter Pills */}
-      <div className="flex gap-2 px-4 py-3 overflow-x-auto no-scrollbar">
+      <div className="flex gap-2 px-4 md:px-0 py-3 md:pt-0 overflow-x-auto no-scrollbar">
         {['全部', ...CATEGORIES].map(cat => (
           <button
             key={cat}
@@ -102,7 +108,7 @@ export default function Budget() {
       </div>
 
       {/* Expense List */}
-      <div className="px-4 space-y-2">
+      <div className="px-4 md:px-0 space-y-2">
         {loading ? (
           <p className="text-center text-stone-300 text-sm py-10">載入中⋯</p>
         ) : filtered.length === 0 ? (
@@ -129,11 +135,13 @@ export default function Budget() {
           ))
         )}
       </div>
+      </div>
+      </div>
 
       {/* FAB */}
       <button
         onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 bg-autumn text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-autumn text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
         style={{ width: 52, height: 52 }}
       >
         <Plus size={24} />
@@ -141,10 +149,10 @@ export default function Budget() {
 
       {/* Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-white rounded-t-3xl px-5 pt-5 pb-8">
-            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5" />
+          <div className="relative bg-white rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
+            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-800">新增支出</h3>
               <button onClick={() => setModal(false)} className="text-stone-300 hover:text-stone-500">

@@ -1,6 +1,6 @@
 export default function Tools() {
   return (
-    <div className="px-6 py-6 space-y-8 pb-32 font-sans">
+    <div className="px-6 py-6 space-y-8 pb-32 font-sans md:px-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-10 md:pb-24 md:items-start">
 
       {/* Flight Info */}
       <section className="border-t border-gray-200 pt-6">
@@ -55,7 +55,7 @@ export default function Tools() {
       </section>
 
       {/* Emergency */}
-      <section className="border-t border-gray-200 pt-6">
+      <section className="border-t border-gray-200 pt-6 md:col-span-2">
         <h3 className="text-sm font-bold text-[#8B2C2C] tracking-[0.2em] uppercase mb-4 flex items-center gap-1.5">
           ✦ Emergency
         </h3>
