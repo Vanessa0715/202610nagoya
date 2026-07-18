@@ -4,8 +4,8 @@
   "description": "名古屋－高山 6 天 5 夜家族旅遊行程",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#FDFCFB",
-  "theme_color": "#8B2C2C",
+  "background_color": "#E9E5DE",
+  "theme_color": "#6F8172",
   "icons": [
     {
       "src": "icon-192.png",

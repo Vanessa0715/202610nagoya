@@ -8,11 +8,11 @@ const MEMBERS = ['思菡', '俊毅', '金燕', '國峯', '心慈', '思穎', '�
 const DATES = Array.from({ length: 6 }, (_, i) => `10/${String(i + 1).padStart(2, '0')}`)
 
 const CAT_STYLE = {
-  交通: { dot: 'bg-sky-400', pill: 'bg-sky-100 text-sky-700' },
-  住宿: { dot: 'bg-indigo-400', pill: 'bg-indigo-100 text-indigo-700' },
-  餐食: { dot: 'bg-orange-400', pill: 'bg-orange-100 text-orange-700' },
-  購物: { dot: 'bg-pink-400', pill: 'bg-pink-100 text-pink-700' },
-  票券: { dot: 'bg-purple-400', pill: 'bg-purple-100 text-purple-700' },
+  交通: { dot: 'bg-[#8C99A3]', pill: 'bg-[#8C99A3]/15 text-[#5F6E7A]' },
+  住宿: { dot: 'bg-[#8A819C]', pill: 'bg-[#8A819C]/15 text-[#645C78]' },
+  餐食: { dot: 'bg-[#C09B7A]', pill: 'bg-[#C09B7A]/15 text-[#8A6A4C]' },
+  購物: { dot: 'bg-[#C29CA4]', pill: 'bg-[#C29CA4]/15 text-[#8E6470]' },
+  票券: { dot: 'bg-[#9A8FA8]', pill: 'bg-[#9A8FA8]/15 text-[#6C6180]' },
 }
 
 const EMPTY_FORM = { date: '10/01', category: '交通', title: '', amount: '', paidBy: '公共' }
@@ -74,7 +74,7 @@ export default function Budget() {
       <div className="md:grid md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-8 md:px-8 md:pt-6 md:items-start">
       <div className="md:sticky md:top-[88px]">
       {/* Summary Card */}
-      <div className="mx-4 md:mx-0 mt-4 md:mt-0 rounded-3xl bg-nagoya-red text-white px-5 py-5 shadow-lg">
+      <div className="mx-4 md:mx-0 mt-4 md:mt-0 rounded-3xl bg-sage text-white px-5 py-5 shadow-lg">
         <p className="text-xs opacity-70 font-medium tracking-wide uppercase">總支出</p>
         <p className="text-4xl font-bold mt-1">¥{total.toLocaleString()}</p>
         <p className="text-xs opacity-60 mt-1">7人均攤 約 ¥{Math.round(total / 7).toLocaleString()} / 人</p>
@@ -99,7 +99,7 @@ export default function Budget() {
             key={cat}
             onClick={() => setFilter(cat)}
             className={`flex-shrink-0 text-xs px-3.5 py-1.5 rounded-full font-medium transition-colors ${
-              filter === cat ? 'bg-autumn text-white' : 'bg-white text-stone-500 border border-stone-100'
+              filter === cat ? 'bg-latte text-white' : 'bg-oat text-stone-500 border border-[#E2DCD1]'
             }`}
           >
             {cat}
@@ -118,7 +118,7 @@ export default function Budget() {
           </div>
         ) : (
           filtered.map(item => (
-            <div key={item.id} className="bg-white rounded-2xl px-4 py-3 shadow-sm border border-stone-100 flex items-center gap-3">
+            <div key={item.id} className="bg-oat rounded-2xl px-4 py-3 shadow-sm border border-[#E2DCD1] flex items-center gap-3">
               <div className={`w-2 h-2 rounded-full flex-shrink-0 ${CAT_STYLE[item.category]?.dot || 'bg-stone-300'}`} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-stone-800 truncate">{item.title}</p>
@@ -128,7 +128,7 @@ export default function Budget() {
                 {item.category}
               </span>
               <p className="text-sm font-semibold text-stone-800 flex-shrink-0">¥{Number(item.amount).toLocaleString()}</p>
-              <button onClick={() => deleteItem(item.id)} className="flex-shrink-0 text-stone-200 hover:text-red-400 active:scale-90 transition-transform">
+              <button onClick={() => deleteItem(item.id)} className="flex-shrink-0 text-stone-200 hover:text-[#B08A8B] active:scale-90 transition-transform">
                 <Trash2 size={15} />
               </button>
             </div>
@@ -141,7 +141,7 @@ export default function Budget() {
       {/* FAB */}
       <button
         onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-autumn text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-latte text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
         style={{ width: 52, height: 52 }}
       >
         <Plus size={24} />
@@ -151,7 +151,7 @@ export default function Budget() {
       {modal && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-white rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
+          <div className="relative bg-oat rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-800">新增支出</h3>
@@ -167,7 +167,7 @@ export default function Budget() {
                   <select
                     value={form.date}
                     onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))}
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-autumn"
+                    className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm bg-oat focus:outline-none focus:border-latte"
                   >
                     {DATES.map(d => <option key={d}>{d}</option>)}
                   </select>
@@ -177,7 +177,7 @@ export default function Budget() {
                   <select
                     value={form.category}
                     onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))}
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-autumn"
+                    className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm bg-oat focus:outline-none focus:border-latte"
                   >
                     {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                   </select>
@@ -191,7 +191,7 @@ export default function Budget() {
                   value={form.title}
                   onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))}
                   placeholder="如：新幹線名古屋→岐阜"
-                  className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-autumn"
+                  className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-latte"
                   autoFocus
                 />
               </div>
@@ -205,7 +205,7 @@ export default function Budget() {
                     value={form.amount}
                     onChange={(e) => setForm(f => ({ ...f, amount: e.target.value }))}
                     placeholder="3500"
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-autumn"
+                    className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-latte"
                   />
                 </div>
                 <div className="flex-1">
@@ -213,7 +213,7 @@ export default function Budget() {
                   <select
                     value={form.paidBy}
                     onChange={(e) => setForm(f => ({ ...f, paidBy: e.target.value }))}
-                    className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-autumn"
+                    className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm bg-oat focus:outline-none focus:border-latte"
                   >
                     {MEMBERS.map(m => <option key={m}>{m}</option>)}
                   </select>
@@ -224,7 +224,7 @@ export default function Budget() {
             <button
               onClick={handleSave}
               disabled={!form.title.trim() || !form.amount}
-              className="w-full mt-5 bg-autumn text-white py-3 rounded-xl font-semibold text-sm disabled:opacity-40 active:scale-95 transition-transform"
+              className="w-full mt-5 bg-latte text-white py-3 rounded-xl font-semibold text-sm disabled:opacity-40 active:scale-95 transition-transform"
             >
               儲存
             </button>

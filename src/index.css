@@ -2,10 +2,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-nagoya-red: #8B2C2C;
-  --color-cream: #FDFCFB;
-  --color-autumn: #d4740a;
-  --color-matcha: #879782;
+  /* 莫蘭迪「森の栞」色票 */
+  --color-sage: #6F8172;    /* 鼠尾草綠 · 主色 */
+  --color-mist: #AEBBAF;    /* 霧綠 · 線條 */
+  --color-latte: #AD8B76;   /* 奶茶棕 · 點綴 */
+  --color-cream: #E9E5DE;   /* 暖灰米 · 底色 */
+  --color-oat: #F4F1EB;     /* 燕麥白 · 卡片 */
+  --color-ink: #4A4A43;     /* 暖灰墨 · 文字 */
   --font-sans: 'Noto Sans TC', system-ui, sans-serif;
 }
 
@@ -14,7 +17,7 @@
 }
 
 body {
-  background-color: #FDFCFB;
+  background-color: #E9E5DE;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -49,8 +52,8 @@ body {
   position: absolute;
   right: 8px;
   bottom: -6px;
-  border: 1px solid #8B2C2C;
-  color: #8B2C2C;
+  border: 1px solid #AD8B76;
+  color: #AD8B76;
   transform: rotate(-5deg);
   padding: 2px 6px;
   font-size: 0.62rem;

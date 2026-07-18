@@ -65,21 +65,21 @@ export default function Packing() {
   return (
     <div className="pb-6">
       {/* Progress Card */}
-      <div className="mx-4 md:mx-8 mt-4 md:mt-6 bg-white rounded-3xl px-5 py-4 shadow-sm border border-stone-100">
+      <div className="mx-4 md:mx-8 mt-4 md:mt-6 bg-oat rounded-3xl px-5 py-4 shadow-sm border border-[#E2DCD1]">
         <div className="flex items-center justify-between mb-2.5">
           <span className="text-sm font-semibold text-stone-700">打包進度</span>
-          <span className={`text-sm font-bold ${allDone ? 'text-matcha' : 'text-stone-500'}`}>
+          <span className={`text-sm font-bold ${allDone ? 'text-sage' : 'text-stone-500'}`}>
             {checkedCount} / {total}
           </span>
         </div>
         <div className="h-2.5 bg-stone-100 rounded-full overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-500 ${allDone ? 'bg-matcha' : 'bg-autumn'}`}
+            className={`h-full rounded-full transition-all duration-500 ${allDone ? 'bg-sage' : 'bg-latte'}`}
             style={{ width: `${progress}%` }}
           />
         </div>
         {allDone && total > 0 && (
-          <p className="text-center text-xs text-matcha mt-2.5 font-semibold">✓ 全部打包完成，出發囉！</p>
+          <p className="text-center text-xs text-sage mt-2.5 font-semibold">✓ 全部打包完成，出發囉！</p>
         )}
         {total === 0 && !loading && (
           <p className="text-center text-xs text-stone-300 mt-2">新增物品後即可開始追蹤</p>
@@ -112,12 +112,12 @@ export default function Packing() {
                   {grouped[cat].map(item => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-3 bg-white rounded-2xl px-3.5 py-3 shadow-sm border border-stone-100"
+                      className="flex items-center gap-3 bg-oat rounded-2xl px-3.5 py-3 shadow-sm border border-[#E2DCD1]"
                     >
                       <button
                         onClick={() => toggleItem(item.id, !item.checked)}
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all active:scale-90 ${
-                          item.checked ? 'bg-matcha border-matcha' : 'border-stone-300'
+                          item.checked ? 'bg-sage border-sage' : 'border-stone-300'
                         }`}
                       >
                         {item.checked && <Check size={11} className="text-white" strokeWidth={3} />}
@@ -129,7 +129,7 @@ export default function Packing() {
                       </span>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="flex-shrink-0 text-stone-200 hover:text-red-400 active:scale-90 transition-transform"
+                        className="flex-shrink-0 text-stone-200 hover:text-[#B08A8B] active:scale-90 transition-transform"
                       >
                         <X size={14} />
                       </button>
@@ -145,7 +145,7 @@ export default function Packing() {
       {/* FAB */}
       <button
         onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-matcha text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-sage text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
         style={{ width: 52, height: 52 }}
       >
         <Plus size={24} />
@@ -155,7 +155,7 @@ export default function Packing() {
       {modal && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-white rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
+          <div className="relative bg-oat rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-800">新增物品</h3>
@@ -170,7 +170,7 @@ export default function Packing() {
                 <select
                   value={form.category}
                   onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))}
-                  className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-matcha"
+                  className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm bg-oat focus:outline-none focus:border-sage"
                 >
                   {DEFAULT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
                 </select>
@@ -184,7 +184,7 @@ export default function Packing() {
                   onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                   onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                   placeholder="如：換洗衣物×5套"
-                  className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-matcha"
+                  className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-sage"
                   autoFocus
                 />
               </div>
@@ -193,7 +193,7 @@ export default function Packing() {
             <button
               onClick={handleSave}
               disabled={!form.name.trim()}
-              className="w-full mt-5 bg-matcha text-white py-3 rounded-xl font-semibold text-sm disabled:opacity-40 active:scale-95 transition-transform"
+              className="w-full mt-5 bg-sage text-white py-3 rounded-xl font-semibold text-sm disabled:opacity-40 active:scale-95 transition-transform"
             >
               新增
             </button>

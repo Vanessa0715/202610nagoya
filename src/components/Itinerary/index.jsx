@@ -29,13 +29,13 @@ const TAGS = ['景點', '交通', '早餐', '午餐', '晚餐', '點心', '備�
 
 const getTagStyle = (tag) => {
   const map = {
-    景點:     'text-[#879782] border-[#879782]/40 bg-[#879782]/5',
-    交通:     'text-[#7A8B99] border-[#7A8B99]/40 bg-[#7A8B99]/5',
+    景點:     'text-[#7E9384] border-[#7E9384]/40 bg-[#7E9384]/5',
+    交通:     'text-[#8C99A3] border-[#8C99A3]/40 bg-[#8C99A3]/5',
     早餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
     午餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
     晚餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
     點心:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
-    住宿:     'text-[#B29D82] border-[#B29D82]/40 bg-[#B29D82]/5',
+    住宿:     'text-[#AD8B76] border-[#AD8B76]/40 bg-[#AD8B76]/5',
     票券:     'text-[#8A819C] border-[#8A819C]/40 bg-[#8A819C]/5',
     裝備出租: 'text-[#7A9999] border-[#7A9999]/40 bg-[#7A9999]/5',
     教練:     'text-[#7A9999] border-[#7A9999]/40 bg-[#7A9999]/5',
@@ -92,7 +92,7 @@ function WeatherWidget({ lat, lon }) {
 
   if (loading) {
     return (
-      <div className="mx-5 md:mx-0 mb-4 h-20 bg-[#F7F5F0] rounded-sm animate-pulse" />
+      <div className="mx-5 md:mx-0 mb-4 h-20 bg-[#F4F1EB] rounded-sm animate-pulse" />
     )
   }
   if (!data?.hourly || !data?.current_weather) return null
@@ -121,15 +121,15 @@ function WeatherWidget({ lat, lon }) {
       {/* Hourly strip — always visible, tap to toggle detail */}
       <button
         onClick={() => setOpen(v => !v)}
-        className="w-full flex justify-between items-center px-4 py-3 bg-[#F7F5F0] rounded-sm border border-[#EBE7DF] active:opacity-80 transition-opacity"
+        className="w-full flex justify-between items-center px-4 py-3 bg-[#F4F1EB] rounded-sm border border-[#DED9CF] active:opacity-80 transition-opacity"
       >
         {slots.map((s, i) => (
           <div key={i} className="flex flex-col items-center gap-1">
-            <span className={`text-[0.58rem] tracking-wider ${i === 0 ? 'text-[#8B2C2C] font-bold' : 'text-[#A5998A]'}`}>
+            <span className={`text-[0.58rem] tracking-wider ${i === 0 ? 'text-[#6F8172] font-bold' : 'text-[#A5998A]'}`}>
               {s.label}
             </span>
             <span className="text-xl leading-none">{s.emoji}</span>
-            <span className={`text-sm font-bold leading-none ${i === 0 ? 'text-[#222]' : 'text-[#555]'}`}>
+            <span className={`text-sm font-bold leading-none ${i === 0 ? 'text-[#43473F]' : 'text-[#6B685C]'}`}>
               {s.temp}°
             </span>
           </div>
@@ -139,11 +139,11 @@ function WeatherWidget({ lat, lon }) {
 
       {/* Expandable outfit guide */}
       {open && (
-        <div className="mt-1.5 flex items-start gap-3 bg-[#F7F5F0] border border-[#EBE7DF] rounded-sm px-4 py-3 animate-fade-in">
+        <div className="mt-1.5 flex items-start gap-3 bg-[#F4F1EB] border border-[#DED9CF] rounded-sm px-4 py-3 animate-fade-in">
           <span className="text-2xl mt-0.5 shrink-0">{outfit.icon}</span>
           <div>
             <p className="text-[0.52rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-1">Outfit Guide</p>
-            <p className="text-[0.82rem] text-[#555] leading-relaxed">{outfit.text}</p>
+            <p className="text-[0.82rem] text-[#6B685C] leading-relaxed">{outfit.text}</p>
           </div>
         </div>
       )}
@@ -232,7 +232,7 @@ export default function Itinerary() {
   return (
     <div>
       {/* Day selector */}
-      <div className="sticky top-[90px] md:top-[72px] z-10 bg-[#FDFCFB] flex justify-between md:justify-center md:gap-14 px-6 py-4 border-b border-gray-100">
+      <div className="sticky top-[94px] md:top-[72px] z-10 bg-cream flex justify-between md:justify-center md:gap-14 px-6 py-4 border-b border-[#D6D0C4]">
         {DAY_DATA.map((d, i) => (
           <button
             key={i}
@@ -240,17 +240,17 @@ export default function Itinerary() {
             className="flex flex-col items-center w-10 relative"
           >
             <span className={`text-[0.62rem] tracking-wider mb-1 transition-colors ${
-              activeDay === i ? 'text-[#222] font-semibold' : 'text-gray-400'
+              activeDay === i ? 'text-[#43473F] font-semibold' : 'text-gray-400'
             }`}>
               {d.week}
             </span>
             <span className={`text-xl leading-none transition-all ${
-              activeDay === i ? 'font-bold text-[#222] scale-110' : 'text-gray-400 font-medium'
+              activeDay === i ? 'font-bold text-[#43473F] scale-110' : 'text-gray-400 font-medium'
             }`}>
               {d.date.split('/')[1]}
             </span>
             {activeDay === i && (
-              <div className="absolute -bottom-3 w-1 h-1 bg-[#8B2C2C] rounded-full" />
+              <div className="absolute -bottom-3 w-1 h-1 bg-[#6F8172] rounded-full" />
             )}
           </button>
         ))}
@@ -263,13 +263,13 @@ export default function Itinerary() {
       <div className="px-5 md:px-0 py-4 md:pt-0 flex gap-4 items-stretch h-52 md:h-80">
         <div className="flex items-center justify-center w-6 shrink-0">
           <span
-            className="font-serif text-[1.1rem] font-bold tracking-widest text-[#222]"
+            className="font-serif text-[1.1rem] font-bold tracking-widest text-[#43473F]"
             style={{ writingMode: 'vertical-rl', textOrientation: 'upright' }}
           >
             第{CN_NUMS[activeDay]}天
           </span>
         </div>
-        <div className="relative flex-1 rounded-sm overflow-hidden shadow-sm bg-[#EBE7DF]">
+        <div className="relative flex-1 rounded-sm overflow-hidden shadow-sm bg-[#DED9CF]">
           <img
             src={day.image}
             alt={day.subtitle}
@@ -311,18 +311,18 @@ export default function Itinerary() {
                 onClick={() => openView(item)}
               >
                 <div className="w-16 text-right pr-4 pt-1 shrink-0">
-                  <span className="text-[1.05rem] font-bold tracking-wider text-[#333]">
+                  <span className="text-[1.05rem] font-bold tracking-wider text-[#4A4A43]">
                     {item.time || '--:--'}
                   </span>
                 </div>
                 <div className="relative w-4 flex justify-center shrink-0">
                   {i < items.length - 1 && (
-                    <div className="absolute top-3 bottom-[-40px] w-[1px] bg-[#E8E6E1]" />
+                    <div className="absolute top-3 bottom-[-40px] w-0 border-l-[1.5px] border-dotted border-[#AEBBAF]" />
                   )}
-                  <div className="w-[5px] h-[5px] rounded-full bg-[#8B2C2C] mt-[10px] z-10 border border-white shadow-sm group-hover:scale-125 transition-transform" />
+                  <div className="w-[7px] h-[7px] rounded-full bg-sage mt-[9px] z-10 border-2 border-[#E9E5DE] shadow-[0_0_0_1.5px_#CBD2C9] group-hover:scale-125 transition-transform" />
                 </div>
                 <div className="flex-1 pl-4 pb-2">
-                  <h4 className="font-serif text-[1.15rem] font-bold text-[#222] leading-tight mb-2 tracking-wide">
+                  <h4 className="font-serif text-[1.15rem] font-bold text-[#43473F] leading-tight mb-2 tracking-wide">
                     {item.title}
                   </h4>
                   {item.tag && (
@@ -331,7 +331,7 @@ export default function Itinerary() {
                     </span>
                   )}
                   {item.notes && (
-                    <p className="text-[0.82rem] text-[#666] mt-2 line-clamp-2">{item.notes}</p>
+                    <p className="text-[0.82rem] text-[#6B685C] mt-2 line-clamp-2">{item.notes}</p>
                   )}
                 </div>
               </div>
@@ -341,7 +341,7 @@ export default function Itinerary() {
 
         <button
           onClick={openNew}
-          className="w-full py-3 border border-dashed border-[#D4C8B8] text-[#A5998A] rounded-sm text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#F8F7F4] transition-colors mt-2"
+          className="w-full py-3 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-sm text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#F4F1EB] transition-colors mt-2"
         >
           + 新增行程
         </button>
@@ -350,10 +350,10 @@ export default function Itinerary() {
 
       {/* Floating bottom card */}
       {!loading && items.length > 0 && (
-        <div className="fixed bottom-14 md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-2xl px-4 z-20 pointer-events-none">
-          <div className="bg-[#FDFCFB]/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-3 flex items-stretch pointer-events-auto">
+        <div className="fixed bottom-[84px] md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-2xl px-4 z-20 pointer-events-none">
+          <div className="bg-oat/95 backdrop-blur-md border border-[#D6D0C4] rounded-xl shadow-[0_10px_26px_-10px_rgba(60,50,30,0.4)] p-3 flex items-stretch pointer-events-auto">
             {/* GPS OFF */}
-            <div className="flex flex-col items-center justify-center px-3 border-r border-gray-200/80 shrink-0">
+            <div className="flex flex-col items-center justify-center px-3 border-r border-[#DED9CF] shrink-0">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A5998A" strokeWidth="1.5" className="mb-1">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="22" y1="2" x2="2" y2="22" />
@@ -367,10 +367,10 @@ export default function Itinerary() {
               onClick={() => openView(items[0])}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-serif text-xl font-bold text-[#222] leading-none">{items[0].time || '--:--'}</span>
-                <span className="text-[0.5rem] border border-gray-300 text-gray-500 px-1.5 py-0.5 rounded tracking-widest shrink-0">行程預覽</span>
+                <span className="font-serif text-xl font-bold text-[#43473F] leading-none">{items[0].time || '--:--'}</span>
+                <span className="text-[0.5rem] border border-[#C4BCAC] text-latte px-1.5 py-0.5 rounded tracking-widest shrink-0">行程預覽</span>
               </div>
-              <p className="font-serif font-bold text-[#222] text-[0.88rem] truncate mb-0.5">{items[0].title}</p>
+              <p className="font-serif font-bold text-[#43473F] text-[0.88rem] truncate mb-0.5">{items[0].title}</p>
               {items[1] && (
                 <p className="text-[0.62rem] text-gray-500 truncate flex items-center gap-1">
                   <span className="text-gray-400">→</span> {items[1].title}
@@ -380,14 +380,14 @@ export default function Itinerary() {
             {/* Next time */}
             {items[1] && (
               <div
-                className="flex flex-col items-center justify-center px-3 border-l border-gray-200/80 shrink-0 min-w-[64px] cursor-pointer active:opacity-70 transition-opacity"
+                className="flex flex-col items-center justify-center px-3 border-l border-[#DED9CF] shrink-0 min-w-[64px] cursor-pointer active:opacity-70 transition-opacity"
                 onClick={() => openView(items[1])}
               >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" className="mb-1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6B685C" strokeWidth="2" className="mb-1">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
-                <span className="font-serif font-bold text-[#222] text-base leading-none">{items[1].time || '--:--'}</span>
+                <span className="font-serif font-bold text-[#43473F] text-base leading-none">{items[1].time || '--:--'}</span>
                 <span className="text-[0.5rem] text-gray-500 tracking-widest mt-1">下個時間</span>
               </div>
             )}
@@ -402,14 +402,14 @@ export default function Itinerary() {
           onClick={closeModal}
         >
           <div
-            className="bg-[#FDFCFB] w-full max-w-md md:max-w-lg rounded-t-2xl md:rounded-2xl overflow-hidden flex flex-col animate-slide-up shadow-2xl relative"
+            className="bg-oat w-full max-w-md md:max-w-lg rounded-t-2xl md:rounded-2xl overflow-hidden flex flex-col animate-slide-up shadow-2xl relative"
             style={{ maxHeight: '88vh' }}
             onClick={e => e.stopPropagation()}
           >
             {/* Modal header */}
             <div className="px-6 py-4 flex justify-between items-center border-b border-gray-100/80 bg-white/50 shrink-0">
               {editMode ? (
-                <h3 className="font-serif font-bold text-lg tracking-widest text-[#222]">
+                <h3 className="font-serif font-bold text-lg tracking-widest text-[#43473F]">
                   {isNew ? '新增行程' : '編輯行程'}
                 </h3>
               ) : (
@@ -427,18 +427,18 @@ export default function Itinerary() {
               <div className="flex items-center gap-4">
                 {!editMode && viewItem.id && (
                   <>
-                    <button onClick={startEdit} className="text-xl text-gray-400 hover:text-[#333] transition-colors" title="編輯">✏️</button>
-                    <button onClick={handleDelete} className="text-xl text-gray-400 hover:text-[#8B2C2C] transition-colors" title="刪除">🗑️</button>
+                    <button onClick={startEdit} className="text-xl text-gray-400 hover:text-[#4A4A43] transition-colors" title="編輯">✏️</button>
+                    <button onClick={handleDelete} className="text-xl text-gray-400 hover:text-[#B08A8B] transition-colors" title="刪除">🗑️</button>
                   </>
                 )}
-                <button onClick={closeModal} className="text-2xl font-light text-gray-400 hover:text-[#333] transition-colors leading-none">×</button>
+                <button onClick={closeModal} className="text-2xl font-light text-gray-400 hover:text-[#4A4A43] transition-colors leading-none">×</button>
               </div>
             </div>
 
             {/* View mode */}
             {!editMode && viewItem.id && (
               <div className={`flex-1 overflow-y-auto hide-scrollbar px-6 py-8 ${hasNav ? 'pb-40' : 'pb-10'}`}>
-                <h2 className="font-serif text-[1.6rem] font-bold text-[#222] mb-3 leading-snug">
+                <h2 className="font-serif text-[1.6rem] font-bold text-[#43473F] mb-3 leading-snug">
                   {viewItem.title}
                 </h2>
 
@@ -450,13 +450,13 @@ export default function Itinerary() {
                 )}
 
                 {viewItem.reservationNo && (
-                  <div className="mb-8 bg-[#F8F7F4] border border-[#EBE7DF] p-5 rounded-sm shadow-sm relative overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#D4C8B8]" />
+                  <div className="mb-8 bg-[#F4F1EB] border border-[#DED9CF] p-5 rounded-sm shadow-sm relative overflow-hidden">
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#C4BCAC]" />
                     <p className="text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-2">Reservation</p>
-                    <p className="font-serif font-bold text-lg text-[#222]">{viewItem.title}</p>
-                    <div className="border-t border-dashed border-[#EBE7DF] pt-4 mt-4 relative pb-2">
+                    <p className="font-serif font-bold text-lg text-[#43473F]">{viewItem.title}</p>
+                    <div className="border-t border-dashed border-[#DED9CF] pt-4 mt-4 relative pb-2">
                       <p className="text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">Confirmation No.</p>
-                      <p className="font-mono text-xl font-bold text-[#333] tracking-widest">{viewItem.reservationNo}</p>
+                      <p className="font-mono text-xl font-bold text-[#4A4A43] tracking-widest">{viewItem.reservationNo}</p>
                       <div className="stamp-tag">訂單代號</div>
                     </div>
                   </div>
@@ -464,11 +464,11 @@ export default function Itinerary() {
 
                 {viewItem.tag === '住宿' && (
                   <div className="mb-8 bg-white border border-gray-100 p-4 rounded-sm shadow-sm">
-                    <p className="text-[0.58rem] text-[#B29D82] tracking-[0.2em] uppercase font-bold mb-3">住宿憑證（Vouchers）</p>
+                    <p className="text-[0.58rem] text-[#AD8B76] tracking-[0.2em] uppercase font-bold mb-3">住宿憑證（Vouchers）</p>
                     <p className="text-[0.78rem] text-gray-400 text-center py-3 italic">尚未上傳憑證</p>
                     <button
                       onClick={() => alert('PDF 上傳功能即將推出，請先將訂房確認信儲存於手機相簿 🙏')}
-                      className="w-full mt-1 py-2.5 border border-dashed border-[#D4C8B8] text-[#A5998A] rounded-sm text-[0.75rem] tracking-widest hover:bg-[#F8F7F4] transition-colors"
+                      className="w-full mt-1 py-2.5 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-sm text-[0.75rem] tracking-widest hover:bg-[#F4F1EB] transition-colors"
                     >
                       ＋ 上傳 PDF
                     </button>
@@ -488,13 +488,13 @@ export default function Itinerary() {
                     <span className="text-[#A5998A] text-xl">📞</span>
                     <div>
                       <p className="text-[0.55rem] text-[#A5998A] tracking-[0.2em] uppercase mb-0.5 font-bold">Phone / GPS</p>
-                      <p className="font-mono font-bold text-lg text-[#222] tracking-wider">{viewItem.phone}</p>
+                      <p className="font-mono font-bold text-lg text-[#43473F] tracking-wider">{viewItem.phone}</p>
                     </div>
                   </div>
                 )}
 
                 {viewItem.notes && (
-                  <p className="text-[0.9rem] text-[#555] leading-relaxed mb-6">{viewItem.notes}</p>
+                  <p className="text-[0.9rem] text-[#6B685C] leading-relaxed mb-6">{viewItem.notes}</p>
                 )}
 
                 {viewItem.details && (
@@ -502,7 +502,7 @@ export default function Itinerary() {
                     <div className="absolute left-0 top-1 bottom-1 w-[1px] bg-gray-200" />
                     {viewItem.details.split('\n').filter(l => l.trim()).map((line, idx) => (
                       <div key={idx} className="relative text-[0.85rem] text-gray-600 leading-relaxed">
-                        <div className="absolute left-[-21px] top-2 w-2 h-2 rounded-full bg-[#D4C8B8]" />
+                        <div className="absolute left-[-21px] top-2 w-2 h-2 rounded-full bg-[#C4BCAC]" />
                         {line}
                       </div>
                     ))}
@@ -516,20 +516,20 @@ export default function Itinerary() {
               <div className="flex-1 overflow-y-auto hide-scrollbar px-6 py-6 space-y-5">
                 <div className="flex gap-4">
                   <div className="w-1/3">
-                    <label className="block text-[0.58rem] text-[#879782] tracking-[0.2em] uppercase mb-1 font-bold">時間</label>
+                    <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">時間</label>
                     <input
                       type="time"
                       value={form.time}
                       onChange={e => setForm(f => ({ ...f, time: e.target.value }))}
-                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] font-mono bg-transparent text-lg transition-colors"
+                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] font-mono bg-transparent text-lg transition-colors"
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-[0.58rem] text-[#879782] tracking-[0.2em] uppercase mb-1 font-bold">標籤</label>
+                    <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">標籤</label>
                     <select
                       value={form.tag}
                       onChange={e => setForm(f => ({ ...f, tag: e.target.value }))}
-                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] bg-transparent text-base transition-colors"
+                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-base transition-colors"
                     >
                       {TAGS.map(t => <option key={t}>{t}</option>)}
                     </select>
@@ -537,23 +537,23 @@ export default function Itinerary() {
                 </div>
 
                 <div>
-                  <label className="block text-[0.58rem] text-[#879782] tracking-[0.2em] uppercase mb-1 font-bold">標題 *</label>
+                  <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">標題 *</label>
                   <input
                     value={form.title}
                     onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                     placeholder="例：午餐：飛驒牛炸牛排"
                     autoFocus
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] font-serif bg-transparent text-base transition-colors"
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] font-serif bg-transparent text-base transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[0.58rem] text-[#879782] tracking-[0.2em] uppercase mb-1 font-bold">列表簡介</label>
+                  <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">列表簡介</label>
                   <input
                     value={form.notes}
                     onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                     placeholder="顯示在時間軸上的一行說明"
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] bg-transparent text-sm transition-colors"
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                   />
                 </div>
 
@@ -565,7 +565,7 @@ export default function Itinerary() {
                     value={form.address}
                     onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
                     placeholder="導航用地址"
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] bg-transparent text-sm transition-colors"
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                   />
                 </div>
 
@@ -575,7 +575,7 @@ export default function Itinerary() {
                     value={form.mapUrl}
                     onChange={e => setForm(f => ({ ...f, mapUrl: e.target.value }))}
                     placeholder="https://maps.app.goo.gl/..."
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] bg-transparent text-sm transition-colors"
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                   />
                 </div>
 
@@ -586,7 +586,7 @@ export default function Itinerary() {
                       value={form.phone}
                       onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                       placeholder="0577-..."
-                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] font-mono bg-transparent text-sm transition-colors"
+                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] font-mono bg-transparent text-sm transition-colors"
                     />
                   </div>
                   <div className="flex-1">
@@ -595,7 +595,7 @@ export default function Itinerary() {
                       value={form.reservationNo}
                       onChange={e => setForm(f => ({ ...f, reservationNo: e.target.value }))}
                       placeholder="無可留空"
-                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] font-mono bg-transparent text-sm transition-colors"
+                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] font-mono bg-transparent text-sm transition-colors"
                     />
                   </div>
                 </div>
@@ -606,7 +606,7 @@ export default function Itinerary() {
                     value={form.website}
                     onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
                     placeholder="https://..."
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#879782] bg-transparent text-sm transition-colors"
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                   />
                 </div>
 
@@ -617,7 +617,7 @@ export default function Itinerary() {
                     value={form.details}
                     onChange={e => setForm(f => ({ ...f, details: e.target.value }))}
                     placeholder="輸入詳細介紹或筆記..."
-                    className="w-full border border-gray-300 p-3 rounded-md outline-none focus:border-[#879782] bg-transparent text-sm resize-none transition-colors"
+                    className="w-full border border-gray-300 p-3 rounded-md outline-none focus:border-[#6F8172] bg-transparent text-sm resize-none transition-colors"
                   />
                 </div>
               </div>
@@ -626,7 +626,7 @@ export default function Itinerary() {
             {/* View mode: map/website buttons */}
             {hasNav && (
               <div
-                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#FDFCFB] via-[#FDFCFB]/90 to-transparent flex flex-col gap-2.5"
+                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-oat via-oat/90 to-transparent flex flex-col gap-2.5"
                 style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}
               >
                 {viewItem.mapUrl && (
@@ -634,7 +634,7 @@ export default function Itinerary() {
                     href={viewItem.mapUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="block w-full bg-[#879782] text-white py-3.5 rounded text-center text-sm tracking-widest font-bold shadow-md active:opacity-80 transition-opacity"
+                    className="block w-full bg-[#6F8172] text-white py-3.5 rounded text-center text-sm tracking-widest font-bold shadow-md active:opacity-80 transition-opacity"
                   >
                     🧭 Google Maps 導航
                   </a>
@@ -644,7 +644,7 @@ export default function Itinerary() {
                     href={viewItem.website}
                     target="_blank"
                     rel="noreferrer"
-                    className="block w-full bg-[#B29D82] text-white py-3.5 rounded text-center text-sm tracking-widest font-bold shadow-md active:opacity-80 transition-opacity"
+                    className="block w-full bg-[#AD8B76] text-white py-3.5 rounded text-center text-sm tracking-widest font-bold shadow-md active:opacity-80 transition-opacity"
                   >
                     🌐 官方網站
                   </a>
@@ -660,14 +660,14 @@ export default function Itinerary() {
               >
                 <button
                   onClick={closeModal}
-                  className="flex-1 py-3.5 bg-[#F8F7F4] text-gray-500 rounded-sm text-xs tracking-widest font-bold uppercase hover:bg-gray-200 transition-colors"
+                  className="flex-1 py-3.5 bg-[#F4F1EB] text-gray-500 rounded-sm text-xs tracking-widest font-bold uppercase hover:bg-gray-200 transition-colors"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={!form.title.trim()}
-                  className="flex-1 py-3.5 bg-[#879782] text-white rounded-sm text-xs tracking-widest font-bold uppercase disabled:opacity-40 shadow-md active:scale-[0.98] transition-transform"
+                  className="flex-1 py-3.5 bg-[#6F8172] text-white rounded-sm text-xs tracking-widest font-bold uppercase disabled:opacity-40 shadow-md active:scale-[0.98] transition-transform"
                 >
                   儲存
                 </button>
