@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BedDouble } from 'lucide-react'
 import { ref, onValue, push, set, remove } from 'firebase/database'
 import { db } from '../../firebase'
+import { parseArticles } from '../../utils/articles'
 
 const DAY_DATA = [
   { week: 'THU', date: '10/01', subtitle: '名古屋', en: 'NAGOYA', desc: '開啟自駕的序幕',
@@ -176,7 +177,7 @@ function WeatherWidget({ lat, lon }) {
 
 const EMPTY_FORM = {
   time: '12:00', title: '', tag: '景點', notes: '',
-  mapUrl: '', address: '', phone: '', website: '', reservationNo: '', details: '',
+  mapUrl: '', address: '', phone: '', website: '', articles: '', reservationNo: '', details: '',
 }
 
 function useItems(day) {
@@ -217,7 +218,7 @@ function itemToForm(item) {
   return {
     time: item.time || '', title: item.title || '', tag: item.tag || '景點',
     notes: item.notes || '', mapUrl: item.mapUrl || '', address: item.address || '',
-    phone: item.phone || '', website: item.website || '',
+    phone: item.phone || '', website: item.website || '', articles: item.articles || '',
     reservationNo: item.reservationNo || '', details: item.details || '',
   }
 }
@@ -250,7 +251,8 @@ export default function Itinerary() {
     closeModal()
   }
 
-  const hasNav = viewItem && !editMode && viewItem.id && (viewItem.mapUrl || viewItem.website)
+  const articleLinks = viewItem ? parseArticles(viewItem.articles) : []
+  const hasNav = viewItem && !editMode && viewItem.id && (viewItem.mapUrl || viewItem.website || articleLinks.length > 0)
 
   // 浮動卡跟著日本時間走：檢視的分頁是「今天」時，顯示當前／下一筆行程
   const nowJST = useNowJST()
@@ -495,7 +497,14 @@ export default function Itinerary() {
 
             {/* View mode */}
             {!editMode && viewItem.id && (
-              <div className={`flex-1 overflow-y-auto hide-scrollbar px-6 py-8 ${hasNav ? 'pb-40' : 'pb-10'}`}>
+              <div
+                className="flex-1 overflow-y-auto hide-scrollbar px-6 py-8"
+                style={{
+                  paddingBottom: hasNav
+                    ? `${((viewItem.mapUrl ? 1 : 0) + (viewItem.website ? 1 : 0) + articleLinks.length) * 3.6 + 3}rem`
+                    : '2.5rem',
+                }}
+              >
                 <h2 className="font-serif text-[1.6rem] font-bold text-[#43473F] mb-3 leading-snug">
                   {viewItem.title}
                 </h2>
@@ -669,6 +678,17 @@ export default function Itinerary() {
                 </div>
 
                 <div>
+                  <label className="block text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">參考文章（一行一篇：標題 | 網址）</label>
+                  <textarea
+                    rows={3}
+                    value={form.articles}
+                    onChange={e => setForm(f => ({ ...f, articles: e.target.value }))}
+                    placeholder={'高山老街散策攻略 | https://...\n只貼網址也可以'}
+                    className="w-full border border-gray-300 p-3 rounded-md outline-none focus:border-[#6F8172] bg-transparent text-sm resize-none transition-colors"
+                  />
+                </div>
+
+                <div>
                   <label className="block text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">詳細內文（換行自動分段）</label>
                   <textarea
                     rows={4}
@@ -707,6 +727,17 @@ export default function Itinerary() {
                     🌐 官方網站
                   </a>
                 )}
+                {articleLinks.map((a, i) => (
+                  <a
+                    key={i}
+                    href={a.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block w-full bg-white border border-[#AD8B76] text-[#8A6A4C] py-3 rounded text-center text-sm font-bold shadow-sm active:opacity-80 transition-opacity truncate px-4"
+                  >
+                    📖 {a.title}
+                  </a>
+                ))}
               </div>
             )}
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ref, onValue, push, update as dbUpdate, set, remove } from 'firebase/database'
 import { db } from '../../firebase'
+import { parseArticles } from '../../utils/articles'
 import { Plus, X, MapPin, ExternalLink, CalendarPlus } from 'lucide-react'
 
 const SPOT_TAGS = ['景點', '餐廳', '咖啡', '購物', '溫泉', '文化', '自然']
@@ -27,7 +28,7 @@ const DAY_OPTIONS = [
 
 const EMPTY_FORM = {
   name: '', address: '', tags: [], notes: '',
-  mapUrl: '', phone: '', website: '', details: '',
+  mapUrl: '', phone: '', website: '', articles: '', details: '',
 }
 
 function useSpots() {
@@ -66,7 +67,7 @@ function spotToForm(spot) {
   return {
     name: spot.name || '', address: spot.address || '', tags: spot.tags || [],
     notes: spot.notes || '', mapUrl: spot.mapUrl || '', phone: spot.phone || '',
-    website: spot.website || '', details: spot.details || '',
+    website: spot.website || '', articles: spot.articles || '', details: spot.details || '',
   }
 }
 
@@ -124,6 +125,7 @@ export default function Spots() {
       address: s.address || '',
       phone: s.phone || '',
       website: s.website || '',
+      articles: s.articles || '',
       reservationNo: '',
       details: s.details || '',
     })
@@ -132,7 +134,8 @@ export default function Spots() {
     setDayPicker(false)
   }
 
-  const hasLinks = viewSpot && !editMode && viewSpot.id && (viewSpot.mapUrl || viewSpot.website)
+  const articleLinks = viewSpot ? parseArticles(viewSpot.articles) : []
+  const hasLinks = viewSpot && !editMode && viewSpot.id && (viewSpot.mapUrl || viewSpot.website || articleLinks.length > 0)
 
   return (
     <div className="pb-28 md:pb-10">
@@ -300,7 +303,7 @@ export default function Spots() {
                   )}
 
                   {hasLinks && (
-                    <div className="flex gap-2.5 mt-2">
+                    <div className="flex flex-wrap gap-2.5 mt-2">
                       {viewSpot.mapUrl && (
                         <a
                           href={viewSpot.mapUrl}
@@ -321,6 +324,17 @@ export default function Spots() {
                           🌐 官方網站
                         </a>
                       )}
+                      {articleLinks.map((a, i) => (
+                        <a
+                          key={i}
+                          href={a.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="basis-full bg-white border border-[#AD8B76] text-[#8A6A4C] py-3 rounded-xl text-center text-xs font-bold shadow-sm active:opacity-80 transition-opacity truncate px-4"
+                        >
+                          📖 {a.title}
+                        </a>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -452,6 +466,17 @@ export default function Spots() {
                         className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">參考文章（一行一篇：標題 | 網址）</label>
+                    <textarea
+                      rows={3}
+                      value={form.articles}
+                      onChange={e => setForm(f => ({ ...f, articles: e.target.value }))}
+                      placeholder={'高山老街散策攻略 | https://...\n只貼網址也可以'}
+                      className="w-full border border-gray-300 p-3 rounded-md outline-none focus:border-[#6F8172] bg-transparent text-sm resize-none transition-colors"
+                    />
                   </div>
 
                   <div>
