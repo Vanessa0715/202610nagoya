@@ -41,7 +41,7 @@ export default function Tools() {
             { date: '10/01', city: '名古屋', name: 'ixyz杜' },
             { date: '10/02', city: '松本', name: 'Tabino Hotel lit Matsumoto' },
             { date: '10/03–04', city: '高山', name: '高山 東急ステイ 飛驒高山' },
-            { date: '10/05', city: '名古屋', name: '（住宿待確認）' },
+            { date: '10/05', city: '名古屋', name: '大吉屋3号館（日赤館）' },
           ].map(({ date, city, name }) => (
             <li key={date} className="flex justify-between items-start border-b border-dashed border-gray-100 pb-3 last:border-0 last:pb-0">
               <div>
