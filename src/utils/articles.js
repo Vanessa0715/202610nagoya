@@ -1,10 +1,10 @@
-// 參考文章欄位：一行一篇，格式「標題 | 網址」；只貼網址時以網域當標題
+// 參考文章欄位：一行一篇，格式「標題 | 網址」（半形｜全形分隔都可）；只貼網址時以網域當標題
 export function parseArticles(str) {
   if (!str) return []
   return str
     .split('\n')
     .map(line => {
-      const sep = line.indexOf('|')
+      const sep = line.search(/[|｜]/)
       let title = ''
       let url = line.trim()
       if (sep >= 0) {
