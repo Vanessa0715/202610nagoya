@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BedDouble } from 'lucide-react'
 import { ref, onValue, push, set, remove } from 'firebase/database'
 import { db } from '../../firebase'
 
@@ -25,6 +26,27 @@ const DAY_DATA = [
 
 const CN_NUMS = ['一', '二', '三', '四', '五', '六']
 const WEEK_CN = { THU: '四', FRI: '五', SAT: '六', SUN: '日', MON: '一', TUE: '二' }
+
+// 每晚住宿（index 對應 DAY_DATA），query 用於 Google Maps 導航搜尋
+const HOTELS = [
+  { name: 'ixyz杜',                    query: 'ixyz杜 名古屋' },
+  { name: 'Tabino Hotel lit Matsumoto', query: 'Tabino Hotel lit Matsumoto 松本' },
+  { name: '東急ステイ飛驒高山',          query: '東急ステイ飛騨高山' },
+  { name: '東急ステイ飛驒高山',          query: '東急ステイ飛騨高山' },
+  { name: '大吉屋3号館（日赤館）',       query: '大吉屋3号館 日赤館 名古屋' },
+  null, // 10/06 回程日，無住宿
+]
+
+// 日本時間，每 30 秒更新一次
+function useNowJST() {
+  const getJST = () => new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+  const [now, setNow] = useState(getJST)
+  useEffect(() => {
+    const t = setInterval(() => setNow(getJST()), 30000)
+    return () => clearInterval(t)
+  }, [])
+  return now
+}
 
 const TAGS = ['景點', '交通', '早餐', '午餐', '晚餐', '點心', '備案', '裝備出租', '教練', '票券', '住宿']
 
@@ -230,6 +252,27 @@ export default function Itinerary() {
 
   const hasNav = viewItem && !editMode && viewItem.id && (viewItem.mapUrl || viewItem.website)
 
+  // 浮動卡跟著日本時間走：檢視的分頁是「今天」時，顯示當前／下一筆行程
+  const nowJST = useNowJST()
+  const hhmm = `${String(nowJST.getHours()).padStart(2, '0')}:${String(nowJST.getMinutes()).padStart(2, '0')}`
+  const isToday =
+    nowJST.getFullYear() === 2026 && nowJST.getMonth() === 9 && nowJST.getDate() === activeDay + 1
+  let curIdx = 0
+  if (isToday && items.length > 0) {
+    const passed = items.filter(it => (it.time || '00:00') <= hhmm).length
+    curIdx = Math.max(0, passed - 1)
+  }
+  const curItem = items[curIdx]
+  const nextItem = items[curIdx + 1]
+
+  // 「今晚住宿」：行程期間以日本日期為準（清晨 6 點前算前一晚），期間外看目前檢視的天
+  let hotelIdx = activeDay
+  if (nowJST.getFullYear() === 2026 && nowJST.getMonth() === 9) {
+    const d = nowJST.getDate() - (nowJST.getHours() < 6 ? 1 : 0)
+    if (d >= 1 && d <= 6) hotelIdx = d - 1
+  }
+  const hotel = HOTELS[hotelIdx]
+
   return (
     <div>
       {/* Day selector */}
@@ -356,42 +399,53 @@ export default function Itinerary() {
       {!loading && items.length > 0 && (
         <div className="fixed bottom-[84px] md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-2xl px-4 z-20 pointer-events-none">
           <div className="bg-oat/95 backdrop-blur-md border border-[#D6D0C4] rounded-xl shadow-[0_10px_26px_-10px_rgba(60,50,30,0.4)] p-3 flex items-stretch pointer-events-auto">
-            {/* GPS OFF */}
-            <div className="flex flex-col items-center justify-center px-3 border-r border-[#DED9CF] shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A5998A" strokeWidth="1.5" className="mb-1">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="22" y1="2" x2="2" y2="22" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <span className="text-[0.5rem] text-[#A5998A] font-bold tracking-widest leading-none mt-0.5 text-center">GPS<br/>OFF</span>
-            </div>
-            {/* Current event */}
+            {/* 回宿：一鍵導航到今晚住宿 */}
+            {hotel ? (
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotel.query)}`}
+                target="_blank"
+                rel="noreferrer"
+                title={`導航到 ${hotel.name}`}
+                className="flex flex-col items-center justify-center px-3 border-r border-[#DED9CF] shrink-0 active:opacity-70 transition-opacity"
+              >
+                <BedDouble size={19} strokeWidth={1.8} className="text-sage mb-1" />
+                <span className="text-[0.5rem] text-sage font-bold tracking-widest leading-none mt-0.5">回宿</span>
+              </a>
+            ) : (
+              <div className="flex flex-col items-center justify-center px-3 border-r border-[#DED9CF] shrink-0">
+                <BedDouble size={19} strokeWidth={1.8} className="text-[#C4BCAC] mb-1" />
+                <span className="text-[0.5rem] text-[#C4BCAC] font-bold tracking-widest leading-none mt-0.5">回程</span>
+              </div>
+            )}
+            {/* Current event（今天時跟著日本時間走） */}
             <div
               className="flex-1 px-4 flex flex-col justify-center min-w-0 cursor-pointer active:opacity-70 transition-opacity"
-              onClick={() => openView(items[0])}
+              onClick={() => openView(curItem)}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-serif text-xl font-bold text-[#43473F] leading-none">{items[0].time || '--:--'}</span>
-                <span className="text-[0.5rem] border border-[#C4BCAC] text-latte px-1.5 py-0.5 rounded tracking-widest shrink-0">行程預覽</span>
+                <span className="font-serif text-xl font-bold text-[#43473F] leading-none">{curItem.time || '--:--'}</span>
+                <span className="text-[0.5rem] border border-[#C4BCAC] text-latte px-1.5 py-0.5 rounded tracking-widest shrink-0">
+                  {isToday ? `現在 JST ${hhmm}` : '行程預覽'}
+                </span>
               </div>
-              <p className="font-serif font-bold text-[#43473F] text-[0.88rem] truncate mb-0.5">{items[0].title}</p>
-              {items[1] && (
+              <p className="font-serif font-bold text-[#43473F] text-[0.88rem] truncate mb-0.5">{curItem.title}</p>
+              {nextItem && (
                 <p className="text-[0.62rem] text-gray-500 truncate flex items-center gap-1">
-                  <span className="text-gray-400">→</span> {items[1].title}
+                  <span className="text-gray-400">→</span> {nextItem.title}
                 </p>
               )}
             </div>
             {/* Next time */}
-            {items[1] && (
+            {nextItem && (
               <div
                 className="flex flex-col items-center justify-center px-3 border-l border-[#DED9CF] shrink-0 min-w-[64px] cursor-pointer active:opacity-70 transition-opacity"
-                onClick={() => openView(items[1])}
+                onClick={() => openView(nextItem)}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6B685C" strokeWidth="2" className="mb-1">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
-                <span className="font-serif font-bold text-[#43473F] text-base leading-none">{items[1].time || '--:--'}</span>
+                <span className="font-serif font-bold text-[#43473F] text-base leading-none">{nextItem.time || '--:--'}</span>
                 <span className="text-[0.5rem] text-gray-500 tracking-widest mt-1">下個時間</span>
               </div>
             )}
