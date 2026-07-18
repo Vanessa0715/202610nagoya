@@ -3,27 +3,28 @@ import { ref, onValue, push, set, remove } from 'firebase/database'
 import { db } from '../../firebase'
 
 const DAY_DATA = [
-  { week: 'THU', date: '10/01', subtitle: '名古屋', desc: '開啟自駕的序幕',
+  { week: 'THU', date: '10/01', subtitle: '名古屋', en: 'NAGOYA', desc: '開啟自駕的序幕',
     image: `${import.meta.env.BASE_URL}images/day1.jpg`,
     lat: 35.1815, lon: 136.9066 },
-  { week: 'FRI', date: '10/02', subtitle: '馬籠宿・高山', desc: '走進江戶時代',
+  { week: 'FRI', date: '10/02', subtitle: '馬籠宿・高山', en: 'MAGOME · TAKAYAMA', desc: '走進江戶時代',
     image: `${import.meta.env.BASE_URL}images/day2.jpg`,
     lat: 36.1408, lon: 137.2523 },
-  { week: 'SAT', date: '10/03', subtitle: '上高地・新穗高', desc: '神明降臨的阿爾卑斯',
+  { week: 'SAT', date: '10/03', subtitle: '上高地・新穗高', en: 'KAMIKOCHI · SHINHOTAKA', desc: '神明降臨的阿爾卑斯',
     image: `${import.meta.env.BASE_URL}images/day3.jpg`,
     lat: 36.2453, lon: 137.6156 },
-  { week: 'SUN', date: '10/04', subtitle: '白川鄉・高山', desc: '探訪合掌村',
+  { week: 'SUN', date: '10/04', subtitle: '白川鄉・高山', en: 'SHIRAKAWA-GO · TAKAYAMA', desc: '探訪合掌村',
     image: `${import.meta.env.BASE_URL}images/day4.jpg`,
     lat: 36.2575, lon: 136.9062 },
-  { week: 'MON', date: '10/05', subtitle: '金澤', desc: '加賀百萬石榮華',
+  { week: 'MON', date: '10/05', subtitle: '金澤', en: 'KANAZAWA', desc: '加賀百萬石榮華',
     image: `${import.meta.env.BASE_URL}images/day5.jpg`,
     lat: 36.5944, lon: 136.6256 },
-  { week: 'TUE', date: '10/06', subtitle: '返家之旅', desc: '滿載回憶',
+  { week: 'TUE', date: '10/06', subtitle: '返家之旅', en: 'NAGOYA · HOME', desc: '滿載回憶',
     image: `${import.meta.env.BASE_URL}images/day6.jpg`,
     lat: 35.1815, lon: 136.9066 },
 ]
 
 const CN_NUMS = ['一', '二', '三', '四', '五', '六']
+const WEEK_CN = { THU: '四', FRI: '五', SAT: '六', SUN: '日', MON: '一', TUE: '二' }
 
 const TAGS = ['景點', '交通', '早餐', '午餐', '晚餐', '點心', '備案', '裝備出租', '教練', '票券', '住宿']
 
@@ -92,7 +93,7 @@ function WeatherWidget({ lat, lon }) {
 
   if (loading) {
     return (
-      <div className="mx-5 md:mx-0 mb-4 h-20 bg-[#F4F1EB] rounded-sm animate-pulse" />
+      <div className="mx-5 md:mx-0 mb-4 h-20 bg-[#F4F1EB] rounded-xl animate-pulse" />
     )
   }
   if (!data?.hourly || !data?.current_weather) return null
@@ -121,7 +122,7 @@ function WeatherWidget({ lat, lon }) {
       {/* Hourly strip — always visible, tap to toggle detail */}
       <button
         onClick={() => setOpen(v => !v)}
-        className="w-full flex justify-between items-center px-4 py-3 bg-[#F4F1EB] rounded-sm border border-[#DED9CF] active:opacity-80 transition-opacity"
+        className="w-full flex justify-between items-center px-4 py-3 bg-[#F4F1EB] rounded-xl border border-[#DED9CF] active:opacity-80 transition-opacity"
       >
         {slots.map((s, i) => (
           <div key={i} className="flex flex-col items-center gap-1">
@@ -139,7 +140,7 @@ function WeatherWidget({ lat, lon }) {
 
       {/* Expandable outfit guide */}
       {open && (
-        <div className="mt-1.5 flex items-start gap-3 bg-[#F4F1EB] border border-[#DED9CF] rounded-sm px-4 py-3 animate-fade-in">
+        <div className="mt-1.5 flex items-start gap-3 bg-[#F4F1EB] border border-[#DED9CF] rounded-xl px-4 py-3 animate-fade-in">
           <span className="text-2xl mt-0.5 shrink-0">{outfit.icon}</span>
           <div>
             <p className="text-[0.52rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-1">Outfit Guide</p>
@@ -232,28 +233,25 @@ export default function Itinerary() {
   return (
     <div>
       {/* Day selector */}
-      <div className="sticky top-[94px] md:top-[72px] z-10 bg-cream flex justify-between md:justify-center md:gap-14 px-6 py-4 border-b border-[#D6D0C4]">
-        {DAY_DATA.map((d, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveDay(i)}
-            className="flex flex-col items-center w-10 relative"
-          >
-            <span className={`text-[0.62rem] tracking-wider mb-1 transition-colors ${
-              activeDay === i ? 'text-[#43473F] font-semibold' : 'text-gray-400'
-            }`}>
-              {d.week}
-            </span>
-            <span className={`text-xl leading-none transition-all ${
-              activeDay === i ? 'font-bold text-[#43473F] scale-110' : 'text-gray-400 font-medium'
-            }`}>
-              {d.date.split('/')[1]}
-            </span>
-            {activeDay === i && (
-              <div className="absolute -bottom-3 w-1 h-1 bg-[#6F8172] rounded-full" />
-            )}
-          </button>
-        ))}
+      <div className="sticky top-[94px] md:top-[72px] z-10 bg-cream border-b border-[#D6D0C4]">
+        <div className="flex gap-1.5 md:gap-2 md:max-w-lg md:mx-auto px-5 py-3">
+          {DAY_DATA.map((d, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveDay(i)}
+              className={`flex-1 flex flex-col items-center rounded-xl py-1.5 transition-all active:scale-95 ${
+                activeDay === i
+                  ? 'bg-sage text-oat shadow-[0_4px_10px_-4px_rgba(111,129,114,0.55)]'
+                  : 'text-[#A8A296]'
+              }`}
+            >
+              <span className="text-[0.6rem] tracking-wider leading-tight">{d.date.replace('/0', '/')}</span>
+              <span className={`text-sm leading-tight ${activeDay === i ? 'font-bold' : 'font-medium'}`}>
+                {WEEK_CN[d.week]}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Desktop: two-column layout (hero + weather | timeline) */}
@@ -269,7 +267,7 @@ export default function Itinerary() {
             第{CN_NUMS[activeDay]}天
           </span>
         </div>
-        <div className="relative flex-1 rounded-sm overflow-hidden shadow-sm bg-[#DED9CF]">
+        <div className="relative flex-1 rounded-xl overflow-hidden shadow-sm bg-[#DED9CF]">
           <img
             src={day.image}
             alt={day.subtitle}
@@ -295,6 +293,12 @@ export default function Itinerary() {
 
       {/* Timeline */}
       <div className="px-5 md:px-0 pb-44 md:pb-32">
+        {/* Section header */}
+        <div className="flex items-baseline gap-2.5 pt-4">
+          <span className="font-serif text-[0.95rem] font-bold tracking-widest text-[#43473F]">本日行程</span>
+          <span className="text-[0.55rem] tracking-[0.25em] text-latte font-bold">{day.en}</span>
+          <div className="flex-1 border-t border-[#D8CEB9] self-center" />
+        </div>
         {loading ? (
           <div className="text-center text-gray-300 py-16 text-sm tracking-widest">Loading...</div>
         ) : items.length === 0 ? (
@@ -341,7 +345,7 @@ export default function Itinerary() {
 
         <button
           onClick={openNew}
-          className="w-full py-3 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-sm text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#F4F1EB] transition-colors mt-2"
+          className="w-full py-3 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-xl text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#F4F1EB] transition-colors mt-2"
         >
           + 新增行程
         </button>
@@ -450,7 +454,7 @@ export default function Itinerary() {
                 )}
 
                 {viewItem.reservationNo && (
-                  <div className="mb-8 bg-[#F4F1EB] border border-[#DED9CF] p-5 rounded-sm shadow-sm relative overflow-hidden">
+                  <div className="mb-8 bg-[#F4F1EB] border border-[#DED9CF] p-5 rounded-xl shadow-sm relative overflow-hidden">
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#C4BCAC]" />
                     <p className="text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase font-bold mb-2">Reservation</p>
                     <p className="font-serif font-bold text-lg text-[#43473F]">{viewItem.title}</p>
@@ -463,12 +467,12 @@ export default function Itinerary() {
                 )}
 
                 {viewItem.tag === '住宿' && (
-                  <div className="mb-8 bg-white border border-gray-100 p-4 rounded-sm shadow-sm">
+                  <div className="mb-8 bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
                     <p className="text-[0.58rem] text-[#AD8B76] tracking-[0.2em] uppercase font-bold mb-3">住宿憑證（Vouchers）</p>
                     <p className="text-[0.78rem] text-gray-400 text-center py-3 italic">尚未上傳憑證</p>
                     <button
                       onClick={() => alert('PDF 上傳功能即將推出，請先將訂房確認信儲存於手機相簿 🙏')}
-                      className="w-full mt-1 py-2.5 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-sm text-[0.75rem] tracking-widest hover:bg-[#F4F1EB] transition-colors"
+                      className="w-full mt-1 py-2.5 border border-dashed border-[#C4BCAC] text-[#A5998A] rounded-xl text-[0.75rem] tracking-widest hover:bg-[#F4F1EB] transition-colors"
                     >
                       ＋ 上傳 PDF
                     </button>
@@ -484,7 +488,7 @@ export default function Itinerary() {
                 )}
 
                 {viewItem.phone && (
-                  <div className="mb-6 bg-white border border-gray-100 p-4 rounded-sm shadow-sm flex items-center gap-4">
+                  <div className="mb-6 bg-white border border-gray-100 p-4 rounded-xl shadow-sm flex items-center gap-4">
                     <span className="text-[#A5998A] text-xl">📞</span>
                     <div>
                       <p className="text-[0.55rem] text-[#A5998A] tracking-[0.2em] uppercase mb-0.5 font-bold">Phone / GPS</p>
@@ -660,14 +664,14 @@ export default function Itinerary() {
               >
                 <button
                   onClick={closeModal}
-                  className="flex-1 py-3.5 bg-[#F4F1EB] text-gray-500 rounded-sm text-xs tracking-widest font-bold uppercase hover:bg-gray-200 transition-colors"
+                  className="flex-1 py-3.5 bg-[#F4F1EB] text-gray-500 rounded-xl text-xs tracking-widest font-bold uppercase hover:bg-gray-200 transition-colors"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={!form.title.trim()}
-                  className="flex-1 py-3.5 bg-[#6F8172] text-white rounded-sm text-xs tracking-widest font-bold uppercase disabled:opacity-40 shadow-md active:scale-[0.98] transition-transform"
+                  className="flex-1 py-3.5 bg-[#6F8172] text-white rounded-xl text-xs tracking-widest font-bold uppercase disabled:opacity-40 shadow-md active:scale-[0.98] transition-transform"
                 >
                   儲存
                 </button>
