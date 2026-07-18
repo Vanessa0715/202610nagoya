@@ -9,7 +9,7 @@ import Tools from './components/Tools'
 const TABS = [
   { id: 'itinerary', label: '行程', Icon: CalendarDays },
   { id: 'budget',    label: '預算', Icon: Wallet },
-  { id: 'packing',   label: '打包', Icon: Luggage },
+  { id: 'packing',   label: '行李', Icon: Luggage },
   { id: 'spots',     label: '願望', Icon: Sparkles },
   { id: 'tools',     label: '工具', Icon: Settings },
 ]
