@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+/* 字型改由 index.html 一次載入（Noto Sans TC + Noto Serif TC），避免 @import 卡住渲染 */
 @import "tailwindcss";
 
 @theme {

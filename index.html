@@ -11,10 +11,44 @@
     <title>名古屋・高山 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://nagoya-18a9b-default-rtdb.asia-southeast1.firebasedatabase.app" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      .splash{position:fixed;inset:0;background:radial-gradient(120% 40% at 80% -5%,rgba(111,129,114,.10),rgba(111,129,114,0) 55%),#E9E5DE;display:flex;align-items:center;justify-content:center;overflow:hidden}
+      .splash-title{text-align:center;animation:splash-in 1s ease-out both .2s}
+      .splash-kicker{font-size:.55rem;letter-spacing:.3em;color:#A8A296;font-weight:700;margin-bottom:.5rem}
+      .splash-name{font-family:'Noto Serif TC',serif;font-size:1.3rem;font-weight:700;letter-spacing:.15em;color:#43473F}
+      .splash-date{font-size:.6rem;letter-spacing:.2em;color:#918A7C;margin-top:.6rem}
+      .leaf{position:absolute;top:-12%;font-size:1.4rem;opacity:.85;animation:leaf-fall linear infinite}
+      .l1{left:16%;animation-duration:5s}
+      .l2{left:55%;font-size:1.05rem;animation-duration:6.5s;animation-delay:1.2s}
+      .l3{left:80%;animation-duration:5.6s;animation-delay:.5s}
+      .l4{left:36%;font-size:1rem;animation-duration:7s;animation-delay:2.2s}
+      @keyframes leaf-fall{
+        0%{transform:translateY(0) translateX(0) rotate(0)}
+        25%{transform:translateY(28vh) translateX(16px) rotate(70deg)}
+        50%{transform:translateY(56vh) translateX(-12px) rotate(140deg)}
+        75%{transform:translateY(84vh) translateX(14px) rotate(220deg)}
+        100%{transform:translateY(115vh) translateX(-8px) rotate(300deg)}
+      }
+      @keyframes splash-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion:reduce){.leaf{display:none}.splash-title{animation:none}}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="splash">
+        <span class="leaf l1">🍂</span>
+        <span class="leaf l2">🍁</span>
+        <span class="leaf l3">🍂</span>
+        <span class="leaf l4">🍁</span>
+        <div class="splash-title">
+          <div class="splash-kicker">CHUBU · JAPAN</div>
+          <div class="splash-name">🏔️ 10月中部旅行</div>
+          <div class="splash-date">2026/10/01–10/06 · 七人同行</div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
