@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, Wallet, Luggage, MapPin, Settings } from 'lucide-react'
+import { CalendarDays, Wallet, Luggage, Sparkles, Settings } from 'lucide-react'
 import Itinerary from './components/Itinerary'
 import Budget from './components/Budget'
 import Packing from './components/Packing'
@@ -10,7 +10,7 @@ const TABS = [
   { id: 'itinerary', label: '行程', Icon: CalendarDays },
   { id: 'budget',    label: '預算', Icon: Wallet },
   { id: 'packing',   label: '打包', Icon: Luggage },
-  { id: 'spots',     label: '景點', Icon: MapPin },
+  { id: 'spots',     label: '願望', Icon: Sparkles },
   { id: 'tools',     label: '工具', Icon: Settings },
 ]
 
