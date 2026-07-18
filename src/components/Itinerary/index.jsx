@@ -380,7 +380,7 @@ export default function Itinerary() {
                     </span>
                   )}
                   {item.notes && (
-                    <p className="text-[0.82rem] text-[#6B685C] mt-2 line-clamp-2">{item.notes}</p>
+                    <p className="text-[0.82rem] text-[#6B685C] mt-2 whitespace-pre-line">{item.notes}</p>
                   )}
                 </div>
               </div>
@@ -561,7 +561,7 @@ export default function Itinerary() {
                 )}
 
                 {viewItem.notes && (
-                  <p className="text-[0.9rem] text-[#6B685C] leading-relaxed mb-6">{viewItem.notes}</p>
+                  <p className="text-[0.9rem] text-[#6B685C] leading-relaxed mb-6 whitespace-pre-line">{viewItem.notes}</p>
                 )}
 
                 {viewItem.details && (
@@ -615,12 +615,13 @@ export default function Itinerary() {
                 </div>
 
                 <div>
-                  <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">列表簡介</label>
-                  <input
+                  <label className="block text-[0.58rem] text-[#6F8172] tracking-[0.2em] uppercase mb-1 font-bold">列表簡介（可換行）</label>
+                  <textarea
+                    rows={2}
                     value={form.notes}
                     onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
-                    placeholder="顯示在時間軸上的一行說明"
-                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
+                    placeholder="顯示在時間軸上的說明"
+                    className="w-full border border-gray-300 p-3 rounded-md outline-none focus:border-[#6F8172] bg-transparent text-sm resize-none transition-colors"
                   />
                 </div>
 
