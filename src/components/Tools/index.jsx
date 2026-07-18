@@ -94,7 +94,7 @@ export default function Tools() {
         <h3 className="text-sm font-bold text-[#B09455] tracking-[0.2em] uppercase mb-4 flex items-center gap-1.5">
           ✦ 記帳分帳 · Bill Bear
         </h3>
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4">
           <img
             src={`${import.meta.env.BASE_URL}images/billbear.png`}
             alt="Bill Bear"
@@ -105,14 +105,6 @@ export default function Tools() {
             <span className="font-bold text-[#B09455]">付錢當下就記</span>，不要靠回憶！
           </p>
         </div>
-        <a
-          href="https://billbear.app/i/TOA9nOElF05gOtxOCRqv?code=ohzE8xE3"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block text-center bg-sage text-oat font-bold tracking-widest text-xs rounded-xl py-3 shadow-[0_4px_10px_-4px_rgba(111,129,114,0.6)] active:scale-95 transition-transform"
-        >
-          打開 Bill Bear 記帳去 →
-        </a>
       </section>
 
       {/* Emergency */}
