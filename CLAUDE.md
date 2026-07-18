@@ -32,8 +32,7 @@ VITE_FIREBASE_APP_ID=
 | 模組 | 說明 |
 |------|------|
 | 每日行程時間軸 | Day 1（10/1）～ Day 6（10/6），可新增/編輯景點、標籤 |
-| 預算追蹤 | 分類記帳（交通、住宿、餐食、購物、票券），顯示總計 |
-| 打包清單 | 可勾選 checklist，支援即時同步 |
+| 打包清單（行李） | 共用提醒清單（項目同步、勾選各存各的手機）；已移除新增按鈕，項目固定，僅可刪除 |
 | 願望清單（原景點） | 家人共同許願池：想去想吃的備案小卡，欄位比照行程，可一鍵排入指定日期的行程（標記「已排入」） |
 
 ## 行程 Tag 對照
@@ -60,8 +59,7 @@ https://www.notion.so/vanessa0715/a11610d27627835089d581fe63738df9
 | 想改的區塊 | 檔案路徑 |
 |-----------|---------|
 | 每日行程 | `src/components/Itinerary/index.jsx` |
-| 預算追蹤 | `src/components/Budget/index.jsx` |
-| 打包清單 | `src/components/Packing/index.jsx` |
+| 打包清單（行李） | `src/components/Packing/index.jsx` |
 | 願望清單（原景點） | `src/components/Spots/index.jsx` |
 | 整體版面／導覽 | `src/App.jsx` |
 | 全域樣式 | `src/App.css` / `src/index.css` |

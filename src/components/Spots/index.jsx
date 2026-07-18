@@ -135,7 +135,7 @@ export default function Spots() {
   const hasLinks = viewSpot && !editMode && viewSpot.id && (viewSpot.mapUrl || viewSpot.website)
 
   return (
-    <div className="pb-6">
+    <div className="pb-28 md:pb-10">
       {/* Filter */}
       <div className="flex gap-2 px-4 md:px-8 py-4 md:py-5 overflow-x-auto no-scrollbar">
         {['全部', ...SPOT_TAGS].map(tag => (

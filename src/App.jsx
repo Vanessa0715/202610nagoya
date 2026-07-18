@@ -1,14 +1,12 @@
 import { useState } from 'react'
-import { CalendarDays, Wallet, Luggage, Sparkles, Settings } from 'lucide-react'
+import { CalendarDays, Luggage, Sparkles, Settings } from 'lucide-react'
 import Itinerary from './components/Itinerary'
-import Budget from './components/Budget'
 import Packing from './components/Packing'
 import Spots from './components/Spots'
 import Tools from './components/Tools'
 
 const TABS = [
   { id: 'itinerary', label: '行程', Icon: CalendarDays },
-  { id: 'budget',    label: '預算', Icon: Wallet },
   { id: 'packing',   label: '行李', Icon: Luggage },
   { id: 'spots',     label: '願望', Icon: Sparkles },
   { id: 'tools',     label: '工具', Icon: Settings },
@@ -58,7 +56,6 @@ export default function App() {
       {/* Main content */}
       <main>
         {tab === 'itinerary' && <Itinerary />}
-        {tab === 'budget'    && <Budget />}
         {tab === 'packing'   && <Packing />}
         {tab === 'spots'     && <Spots />}
         {tab === 'tools'     && <Tools />}

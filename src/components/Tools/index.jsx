@@ -89,6 +89,33 @@ export default function Tools() {
         </div>
       </section>
 
+      {/* Bill Bear */}
+      <section className="border-t border-[#D6D0C4] pt-6 md:col-span-2">
+        <h3 className="text-sm font-bold text-[#B09455] tracking-[0.2em] uppercase mb-4 flex items-center gap-1.5">
+          ✦ 記帳分帳 · Bill Bear
+        </h3>
+        <div className="flex items-center gap-4 mb-4">
+          <img
+            src={`${import.meta.env.BASE_URL}images/billbear.png`}
+            alt="Bill Bear"
+            className="w-14 h-14 rounded-2xl shadow-sm shrink-0 border border-[#D6D0C4]/60"
+          />
+          <p className="text-[0.75rem] text-[#918A7C] leading-relaxed flex-1">
+            旅途中的代墊、共同開銷都記在 <span className="font-bold text-[#4A4A43]">Bill Bear</span>，回台灣一次結清。
+            <span className="font-bold text-[#B09455]">付錢當下就記</span>，不要靠回憶！
+          </p>
+        </div>
+        <a
+          href="https://billbear.app/i/TOA9nOElF05gOtxOCRqv?code=ohzE8xE3"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-center bg-sage text-oat font-bold tracking-widest text-xs rounded-xl py-3 shadow-[0_4px_10px_-4px_rgba(111,129,114,0.6)] active:scale-95 transition-transform"
+        >
+          加入我們的 Bill Bear 群組 →
+        </a>
+        <p className="text-[0.62rem] text-gray-400 text-center mt-2">還沒裝 App 的人點連結會先導去下載</p>
+      </section>
+
       {/* Emergency */}
       <section className="border-t border-[#D6D0C4] pt-6 md:col-span-2">
         <h3 className="text-sm font-bold text-[#A56A64] tracking-[0.2em] uppercase mb-4 flex items-center gap-1.5">

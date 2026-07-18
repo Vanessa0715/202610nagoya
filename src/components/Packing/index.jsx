@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { ref, onValue, push, remove } from 'firebase/database'
+import { ref, onValue, remove } from 'firebase/database'
 import { db } from '../../firebase'
-import { Plus, X, Check, ChevronRight } from 'lucide-react'
+import { X, Check, ChevronRight } from 'lucide-react'
 
 const DEFAULT_CATEGORIES = ['證件', '衣物', '盥洗', '電子', '藥品', '其他']
 
@@ -52,8 +52,6 @@ const ESSENTIALS = [
   },
 ]
 
-const EMPTY_FORM = { category: '衣物', name: '' }
-
 const CHECKED_KEY = 'luggage-checked'
 
 function loadChecked() {
@@ -87,18 +85,15 @@ function usePacking() {
     }
   }, [])
 
-  const addItem = (item) => push(ref(db, 'packing'), item)
   const deleteItem = (id) => remove(ref(db, `packing/${id}`))
 
-  return { items, loading, addItem, deleteItem }
+  return { items, loading, deleteItem }
 }
 
 export default function Packing() {
-  const { items, loading, addItem, deleteItem } = usePacking()
+  const { items, loading, deleteItem } = usePacking()
   const [checked, setChecked] = useState(loadChecked)
-  const [modal, setModal] = useState(false)
   const [detail, setDetail] = useState(null)
-  const [form, setForm] = useState(EMPTY_FORM)
 
   const total = items.length
 
@@ -121,15 +116,8 @@ export default function Packing() {
   extraCats.forEach(cat => { grouped[cat] = items.filter(i => i.category === cat) })
   const allCats = [...DEFAULT_CATEGORIES, ...extraCats]
 
-  const handleSave = async () => {
-    if (!form.name.trim()) return
-    await addItem(form)
-    setModal(false)
-    setForm(EMPTY_FORM)
-  }
-
   return (
-    <div className="pb-6">
+    <div className="pb-28 md:pb-10">
       {/* Essentials */}
       <div className="mx-4 md:mx-8 mt-4 md:mt-6">
         <div className="flex items-center gap-2 mb-2">
@@ -166,7 +154,6 @@ export default function Packing() {
           <div className="text-center text-stone-300 py-12">
             <div className="text-4xl mb-3">🎒</div>
             <p className="text-sm">還沒有行李提醒</p>
-            <p className="text-xs mt-1">點右下角 ＋ 開始新增</p>
           </div>
         ) : (
           allCats.map(cat =>
@@ -208,15 +195,6 @@ export default function Packing() {
           )
         )}
       </div>
-
-      {/* FAB */}
-      <button
-        onClick={() => setModal(true)}
-        className="fixed right-4 bottom-20 md:bottom-10 md:right-[calc(50%-24rem+2rem)] lg:right-[calc(50%-32rem+2rem)] bg-sage text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform"
-        style={{ width: 52, height: 52 }}
-      >
-        <Plus size={24} />
-      </button>
 
       {/* Essential Detail Modal */}
       {detail && (
@@ -264,55 +242,6 @@ export default function Packing() {
         </div>
       )}
 
-      {/* Modal */}
-      {modal && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setModal(false)} />
-          <div className="relative bg-oat rounded-t-3xl md:rounded-3xl md:w-full md:max-w-md px-5 pt-5 pb-8">
-            <div className="w-10 h-1 bg-stone-200 rounded-full mx-auto mb-5 md:hidden" />
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-stone-800">新增物品</h3>
-              <button onClick={() => setModal(false)} className="text-stone-300 hover:text-stone-500">
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="space-y-3.5">
-              <div>
-                <label className="text-xs text-stone-400 mb-1 block">分類</label>
-                <select
-                  value={form.category}
-                  onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))}
-                  className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm bg-oat focus:outline-none focus:border-sage"
-                >
-                  {DEFAULT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs text-stone-400 mb-1 block">物品名稱 *</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-                  placeholder="如：護照、常備藥"
-                  className="w-full border border-[#DED9CF] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-sage"
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={handleSave}
-              disabled={!form.name.trim()}
-              className="w-full mt-5 bg-sage text-white py-3 rounded-xl font-semibold text-sm disabled:opacity-40 active:scale-95 transition-transform"
-            >
-              新增
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
