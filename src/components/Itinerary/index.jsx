@@ -49,12 +49,13 @@ function useNowJST() {
   return now
 }
 
-const TAGS = ['景點', '交通', '早餐', '午餐', '晚餐', '點心', '備案', '裝備出租', '教練', '票券', '住宿']
+const TAGS = ['景點', '交通', '停車', '早餐', '午餐', '晚餐', '點心', '備案', '裝備出租', '教練', '票券', '住宿']
 
 const getTagStyle = (tag) => {
   const map = {
     景點:     'text-[#7E9384] border-[#7E9384]/40 bg-[#7E9384]/5',
     交通:     'text-[#8C99A3] border-[#8C99A3]/40 bg-[#8C99A3]/5',
+    停車:     'text-[#96896F] border-[#96896F]/40 bg-[#96896F]/5',
     早餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
     午餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
     晚餐:     'text-[#B08A8B] border-[#B08A8B]/40 bg-[#B08A8B]/5',
@@ -177,7 +178,7 @@ function WeatherWidget({ lat, lon }) {
 
 const EMPTY_FORM = {
   time: '12:00', title: '', tag: '景點', notes: '',
-  mapUrl: '', address: '', phone: '', website: '', articles: '', reservationNo: '', details: '',
+  mapUrl: '', address: '', phone: '', website: '', articles: '', reservationNo: '', details: '', image: '',
 }
 
 function useItems(day) {
@@ -219,7 +220,7 @@ function itemToForm(item) {
     time: item.time || '', title: item.title || '', tag: item.tag || '景點',
     notes: item.notes || '', mapUrl: item.mapUrl || '', address: item.address || '',
     phone: item.phone || '', website: item.website || '', articles: item.articles || '',
-    reservationNo: item.reservationNo || '', details: item.details || '',
+    reservationNo: item.reservationNo || '', details: item.details || '', image: item.image || '',
   }
 }
 
@@ -505,6 +506,14 @@ export default function Itinerary() {
                     : '2.5rem',
                 }}
               >
+                {viewItem.image && (
+                  <img
+                    src={viewItem.image}
+                    alt={viewItem.title}
+                    className="-mx-6 -mt-8 mb-6 w-[calc(100%+3rem)] h-44 md:h-52 object-cover"
+                    onError={e => { e.target.style.display = 'none' }}
+                  />
+                )}
                 <h2 className="font-serif text-[1.6rem] font-bold text-[#43473F] mb-3 leading-snug">
                   {viewItem.title}
                 </h2>
@@ -643,6 +652,16 @@ export default function Itinerary() {
                     value={form.mapUrl}
                     onChange={e => setForm(f => ({ ...f, mapUrl: e.target.value }))}
                     placeholder="https://maps.app.goo.gl/..."
+                    className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">圖片網址（選填）</label>
+                  <input
+                    value={form.image}
+                    onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
+                    placeholder="貼景點照片網址，顯示在彈窗上方"
                     className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                   />
                 </div>

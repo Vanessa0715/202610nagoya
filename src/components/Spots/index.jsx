@@ -28,7 +28,7 @@ const DAY_OPTIONS = [
 
 const EMPTY_FORM = {
   name: '', address: '', tags: [], notes: '',
-  mapUrl: '', phone: '', website: '', articles: '', details: '',
+  mapUrl: '', phone: '', website: '', articles: '', details: '', image: '',
 }
 
 function useSpots() {
@@ -68,6 +68,7 @@ function spotToForm(spot) {
     name: spot.name || '', address: spot.address || '', tags: spot.tags || [],
     notes: spot.notes || '', mapUrl: spot.mapUrl || '', phone: spot.phone || '',
     website: spot.website || '', articles: spot.articles || '', details: spot.details || '',
+    image: spot.image || '',
   }
 }
 
@@ -128,6 +129,7 @@ export default function Spots() {
       articles: s.articles || '',
       reservationNo: '',
       details: s.details || '',
+      image: s.image || '',
     })
     await patchSpot(s.id, { scheduledDay: day })
     setViewSpot(v => ({ ...v, scheduledDay: day }))
@@ -265,6 +267,14 @@ export default function Spots() {
             {!editMode && viewSpot.id && (
               <>
                 <div className="flex-1 overflow-y-auto hide-scrollbar px-6 py-7">
+                  {viewSpot.image && (
+                    <img
+                      src={viewSpot.image}
+                      alt={viewSpot.name}
+                      className="-mx-6 -mt-7 mb-6 w-[calc(100%+3rem)] h-44 md:h-52 object-cover"
+                      onError={e => { e.target.style.display = 'none' }}
+                    />
+                  )}
                   <h2 className="font-serif text-[1.6rem] font-bold text-[#43473F] mb-3 leading-snug">
                     {viewSpot.name}
                   </h2>
@@ -443,6 +453,16 @@ export default function Spots() {
                       value={form.mapUrl}
                       onChange={e => setForm(f => ({ ...f, mapUrl: e.target.value }))}
                       placeholder="https://maps.app.goo.gl/..."
+                      className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[0.58rem] text-[#A5998A] tracking-[0.2em] uppercase mb-1 font-bold">圖片網址（選填）</label>
+                    <input
+                      value={form.image}
+                      onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
+                      placeholder="貼景點照片網址，顯示在彈窗上方"
                       className="w-full border-b border-gray-300 p-2 outline-none focus:border-[#6F8172] bg-transparent text-sm transition-colors"
                     />
                   </div>
