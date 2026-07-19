@@ -69,6 +69,23 @@ const getTagStyle = (tag) => {
   return map[tag] || 'text-gray-400 border-gray-200 bg-gray-50'
 }
 
+// 時間軸卡片背景塗鴉：依標籤各配一張手繪扁平風貼紙，位置與角度各自錯開營造手帳感
+const STICKER_BASE = `${import.meta.env.BASE_URL}images/stickers/`
+const TAG_DECOR = {
+  景點:     { src: STICKER_BASE + 'mountain.png',    pos: 'top-[-6px] right-1 rotate-[-6deg]',  size: 100 },
+  交通:     { src: STICKER_BASE + 'plane-cloud.png', pos: 'top-[-8px] right-2 rotate-[8deg]',   size: 110 },
+  停車:     { src: STICKER_BASE + 'parking.png',     pos: 'top-0 right-4 rotate-[3deg]',        size: 84 },
+  早餐:     { src: STICKER_BASE + 'croissant.png',   pos: 'top-[-4px] right-3 rotate-[-8deg]',  size: 92 },
+  午餐:     { src: STICKER_BASE + 'onigiri.png',     pos: 'top-1 right-1 rotate-[6deg]',        size: 88 },
+  晚餐:     { src: STICKER_BASE + 'sushi.png',       pos: 'top-[-4px] right-2 rotate-[-5deg]',  size: 96 },
+  點心:     { src: STICKER_BASE + 'ice-cream.png',   pos: 'top-[-6px] right-5 rotate-[9deg]',   size: 86 },
+  備案:     { src: STICKER_BASE + 'dice.png',        pos: 'top-1 right-3 rotate-[-4deg]',       size: 76 },
+  裝備出租: { src: STICKER_BASE + 'backpack.png',    pos: 'top-0 right-1 rotate-[5deg]',        size: 92 },
+  教練:     { src: STICKER_BASE + 'whistle.png',     pos: 'top-2 right-4 rotate-[-6deg]',       size: 80 },
+  票券:     { src: STICKER_BASE + 'ticket.png',      pos: 'top-1 right-0 rotate-[8deg]',        size: 84 },
+  住宿:     { src: STICKER_BASE + 'house.png',       pos: 'top-[-4px] right-2 rotate-[-3deg]',  size: 90 },
+}
+
 function getWeatherEmoji(code) {
   if (code === 0) return '☀️'
   if (code === 1) return '🌤️'
@@ -371,18 +388,28 @@ export default function Itinerary() {
                   )}
                   <div className="w-[7px] h-[7px] rounded-full bg-sage mt-[9px] z-10 border-2 border-[#E9E5DE] shadow-[0_0_0_1.5px_#CBD2C9] group-hover:scale-125 transition-transform" />
                 </div>
-                <div className="flex-1 pl-4 pb-2">
-                  <h4 className="font-serif text-[1.15rem] font-bold text-[#43473F] leading-tight mb-2 tracking-wide">
-                    {item.title}
-                  </h4>
-                  {item.tag && (
-                    <span className={`text-[0.58rem] tracking-[0.18em] px-1.5 py-[1px] rounded-[3px] border ${getTagStyle(item.tag)}`}>
-                      {item.tag.toUpperCase()}
-                    </span>
+                <div className="flex-1 pl-4 pb-2 relative overflow-hidden">
+                  {item.tag && TAG_DECOR[item.tag] && (
+                    <img
+                      src={TAG_DECOR[item.tag].src}
+                      alt=""
+                      className={`absolute ${TAG_DECOR[item.tag].pos} pointer-events-none select-none opacity-20 z-0`}
+                      style={{ width: TAG_DECOR[item.tag].size }}
+                    />
                   )}
-                  {item.notes && (
-                    <p className="text-[0.82rem] text-[#6B685C] mt-2 whitespace-pre-line">{item.notes}</p>
-                  )}
+                  <div className="relative z-10">
+                    <h4 className="font-serif text-[1.15rem] font-bold text-[#43473F] leading-tight mb-2 tracking-wide">
+                      {item.title}
+                    </h4>
+                    {item.tag && (
+                      <span className={`text-[0.58rem] tracking-[0.18em] px-1.5 py-[1px] rounded-[3px] border ${getTagStyle(item.tag)}`}>
+                        {item.tag.toUpperCase()}
+                      </span>
+                    )}
+                    {item.notes && (
+                      <p className="text-[0.82rem] text-[#6B685C] mt-2 whitespace-pre-line">{item.notes}</p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
