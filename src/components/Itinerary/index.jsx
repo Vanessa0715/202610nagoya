@@ -566,7 +566,7 @@ export default function Itinerary() {
                 </div>
                 <div className="relative w-4 flex justify-center shrink-0">
                   {i < items.length - 1 && (
-                    <div className="absolute top-3 bottom-[-40px] w-0 border-l-[1.5px] border-dotted border-[#AEBBAF]" />
+                    <div className="absolute top-3 bottom-[-40px] w-0 border-l-2 border-dotted border-[#AEBBAF]" />
                   )}
                   <div className="w-[7px] h-[7px] rounded-full bg-sage mt-[9px] z-10 border-2 border-[#E9E5DE] shadow-[0_0_0_1.5px_#CBD2C9] group-hover:scale-125 transition-transform" />
                 </div>
