@@ -475,7 +475,7 @@ export default function Itinerary() {
   return (
     <div>
       {/* Day selector */}
-      <div className="sticky top-[94px] md:top-[72px] z-10 bg-cream border-b border-[#D6D0C4]">
+      <div className="sticky top-[94px] md:top-[72px] z-20 bg-cream border-b border-[#D6D0C4]">
         <div className="flex gap-1.5 md:gap-2 md:max-w-lg md:mx-auto px-5 py-3">
           {DAY_DATA.map((d, i) => (
             <button
