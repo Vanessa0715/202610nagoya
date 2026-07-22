@@ -89,6 +89,15 @@ function useNowJST() {
   return now
 }
 
+// 開啟 App 時預設顯示的日期：日本時間落在 2026/10/01～10/06 之間就自動定位到當天，否則預設第一天
+function getDefaultDay() {
+  const jst = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+  if (jst.getFullYear() === 2026 && jst.getMonth() === 9 && jst.getDate() >= 1 && jst.getDate() <= 6) {
+    return jst.getDate() - 1
+  }
+  return 0
+}
+
 const TAGS = ['景點', '交通', '停車', '早餐', '午餐', '晚餐', '點心', '備案', '裝備出租', '教練', '票券', '住宿']
 
 const getTagStyle = (tag) => {
@@ -421,7 +430,7 @@ function itemToForm(item) {
 }
 
 export default function Itinerary() {
-  const [activeDay, setActiveDay] = useState(0)
+  const [activeDay, setActiveDay] = useState(getDefaultDay)
   const { items, loading, add, update, del } = useItems(activeDay + 1)
 
   const [viewItem, setViewItem]   = useState(null)  // null = modal closed
