@@ -24,7 +24,7 @@ export default function App() {
       }}
     >
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-cream/95 backdrop-blur-sm px-5 pt-6 pb-3 flex flex-col items-center md:h-[72px] md:flex-row md:justify-between md:items-center md:px-8 md:pt-0 md:pb-0 md:border-b md:border-[#D6D0C4]">
+      <header className="sticky top-0 z-30 bg-cream/95 backdrop-blur-sm px-5 pt-6 pb-3 flex flex-col items-center md:h-[72px] md:flex-row md:justify-between md:items-center md:px-8 md:pt-0 md:pb-0 md:border-b md:border-[#D6D0C4]">
         <div className="flex flex-col items-center md:flex-row md:items-center md:gap-3">
           <span className="text-[0.5rem] tracking-[0.3em] text-latte font-bold md:hidden">CHUBU · JAPAN</span>
           <h1 className="font-serif text-[1.3rem] font-bold tracking-widest text-[#43473F]">
