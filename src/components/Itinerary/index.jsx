@@ -508,6 +508,40 @@ export default function Itinerary() {
   }
   const hotel = useTonightHotel(hotelIdx)
 
+  // 本日行程區塊左右滑動換天：偏水平方向的滑動才觸發，避免跟上下捲動清單衝突
+  const touchStartRef = useRef({ x: 0, y: 0 })
+  const handleTimelineTouchStart = (e) => {
+    const t = e.touches[0]
+    touchStartRef.current = { x: t.clientX, y: t.clientY }
+  }
+  const handleTimelineTouchEnd = (e) => {
+    const t = e.changedTouches[0]
+    const dx = t.clientX - touchStartRef.current.x
+    const dy = t.clientY - touchStartRef.current.y
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return
+    if (dx < 0 && activeDay < DAY_DATA.length - 1) setActiveDay(activeDay + 1)
+    else if (dx > 0 && activeDay > 0) setActiveDay(activeDay - 1)
+  }
+
+  // 換天後（點日期列或滑動）自動定位：今天就捲到目前時間對應的那筆行程，否則捲回本日行程頂端
+  const timelineRef = useRef(null)
+  const itemRefs = useRef([])
+  const pendingDayScroll = useRef(false)
+  const hasMountedRef = useRef(false)
+  useEffect(() => {
+    if (hasMountedRef.current) pendingDayScroll.current = true
+    hasMountedRef.current = true
+  }, [activeDay])
+  useEffect(() => {
+    if (loading || !pendingDayScroll.current) return
+    pendingDayScroll.current = false
+    if (isToday && itemRefs.current[curIdx]) {
+      itemRefs.current[curIdx].scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else if (timelineRef.current) {
+      timelineRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [loading])
+
   return (
     <div>
       {/* Day selector */}
@@ -573,7 +607,12 @@ export default function Itinerary() {
       </div>
 
       {/* Timeline */}
-      <div className="px-5 md:px-0 pb-44 md:pb-32">
+      <div
+        ref={timelineRef}
+        className="px-5 md:px-0 pb-44 md:pb-32"
+        onTouchStart={handleTimelineTouchStart}
+        onTouchEnd={handleTimelineTouchEnd}
+      >
         {/* Section header */}
         <div className="flex items-baseline gap-2.5 pt-4">
           <span className="font-serif text-[0.95rem] font-bold tracking-widest text-[#43473F]">本日行程</span>
@@ -592,6 +631,7 @@ export default function Itinerary() {
             {items.map((item, i) => (
               <div
                 key={item.id}
+                ref={el => { itemRefs.current[i] = el }}
                 className="flex relative mb-10 cursor-pointer group"
                 onClick={() => openView(item)}
               >
