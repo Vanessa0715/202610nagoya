@@ -534,6 +534,9 @@ export default function Itinerary() {
     hasMountedRef.current = true
   }, [activeDay])
   useEffect(() => {
+    // 盯著 items（實際資料）而不是 loading 這個布林值：如果 Firebase 資料是本地快取、
+    // 幾乎瞬間就回來，loading 的 true→false 過渡可能被 React 批次處理整個跳過，
+    // 但 items 換成新的一天的資料這件事一定會被偵測到，觸發才不會漏掉
     if (loading || !pendingDayScroll.current) return
     pendingDayScroll.current = false
     if (isToday && itemRefs.current[curIdx]) {
@@ -544,7 +547,7 @@ export default function Itinerary() {
       const delta = timelineRef.current.getBoundingClientRect().top - daySelectorRef.current.getBoundingClientRect().bottom
       window.scrollBy({ top: delta, behavior: 'smooth' })
     }
-  }, [loading])
+  }, [items, loading])
 
   return (
     <div>
