@@ -525,6 +525,7 @@ export default function Itinerary() {
 
   // 換天後（點日期列或滑動）自動定位：今天就捲到目前時間對應的那筆行程，否則捲回本日行程頂端
   const timelineRef = useRef(null)
+  const daySelectorRef = useRef(null)
   const itemRefs = useRef([])
   const pendingDayScroll = useRef(false)
   const hasMountedRef = useRef(false)
@@ -537,15 +538,18 @@ export default function Itinerary() {
     pendingDayScroll.current = false
     if (isToday && itemRefs.current[curIdx]) {
       itemRefs.current[curIdx].scrollIntoView({ behavior: 'smooth', block: 'center' })
-    } else if (timelineRef.current) {
-      timelineRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else if (timelineRef.current && daySelectorRef.current) {
+      // 日期選擇列是 sticky，不能直接 scrollIntoView 對齊到 top（會被蓋住），
+      // 要改成把本日行程頂端捲到「日期列下緣」那個位置
+      const delta = timelineRef.current.getBoundingClientRect().top - daySelectorRef.current.getBoundingClientRect().bottom
+      window.scrollBy({ top: delta, behavior: 'smooth' })
     }
   }, [loading])
 
   return (
     <div>
       {/* Day selector */}
-      <div className="sticky top-[94px] md:top-[72px] z-20 bg-cream border-b border-[#D6D0C4]">
+      <div ref={daySelectorRef} className="sticky top-[94px] md:top-[72px] z-20 bg-cream border-b border-[#D6D0C4]">
         <div className="flex gap-1.5 md:gap-2 md:max-w-lg md:mx-auto px-5 py-3">
           {DAY_DATA.map((d, i) => (
             <button
@@ -610,6 +614,7 @@ export default function Itinerary() {
       <div
         ref={timelineRef}
         className="px-5 md:px-0 pb-44 md:pb-32"
+        style={{ touchAction: 'pan-y' }}
         onTouchStart={handleTimelineTouchStart}
         onTouchEnd={handleTimelineTouchEnd}
       >
