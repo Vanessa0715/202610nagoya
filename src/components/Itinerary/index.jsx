@@ -1,8 +1,41 @@
 import { useState, useEffect, useRef } from 'react'
 import { BedDouble } from 'lucide-react'
 import { ref, onValue, push, set, remove } from 'firebase/database'
-import { db } from '../../firebase'
+import { db, authReady } from '../../firebase'
 import { parseArticles } from '../../utils/articles'
+
+// 「回宿」導航目的地：優先用住宿項目的地址，其次從 mapUrl 的 query 參數還原，最後才退回標題
+function stayDestination(stay) {
+  if (stay.address) return stay.address
+  if (stay.mapUrl) {
+    try {
+      const q = new URL(stay.mapUrl).searchParams.get('query')
+      if (q) return q
+    } catch { /* mapUrl 不是合法網址就略過 */ }
+  }
+  return stay.title.replace(/^入住[:：]\s*/, '')
+}
+
+// 每天的「今晚住宿」直接即時讀 Firebase itinerary/day{n} 裡 tag 為「住宿」的項目，
+// 不再另外硬編一份飯店清單，行程頁改了住宿，這裡跟工具頁都會自動跟著變。
+function useTonightHotel(dayIndex) {
+  const [hotel, setHotel] = useState(null)
+  useEffect(() => {
+    let cancelled = false
+    let unsub = () => {}
+    authReady.then(() => {
+      if (cancelled) return
+      const r = ref(db, `itinerary/day${dayIndex + 1}`)
+      unsub = onValue(r, (snap) => {
+        const data = snap.val()
+        const stay = data && Object.values(data).find(v => v.tag === '住宿')
+        setHotel(stay ? { name: stay.title.replace(/^入住[:：]\s*/, ''), destination: stayDestination(stay) } : null)
+      }, () => setHotel(null))
+    })
+    return () => { cancelled = true; unsub() }
+  }, [dayIndex])
+  return hotel
+}
 
 const DAY_DATA = [
   { week: 'THU', date: '10/01', subtitle: '名古屋', en: 'NAGOYA', desc: '開啟自駕的序幕',
@@ -27,16 +60,6 @@ const DAY_DATA = [
 
 const CN_NUMS = ['一', '二', '三', '四', '五', '六']
 const WEEK_CN = { THU: '四', FRI: '五', SAT: '六', SUN: '日', MON: '一', TUE: '二' }
-
-// 每晚住宿（index 對應 DAY_DATA），query 用於 Google Maps 導航搜尋
-const HOTELS = [
-  { name: 'ixyz杜',                    query: 'ixyz杜 名古屋' },
-  { name: 'Tabino Hotel lit Matsumoto', query: 'Tabino Hotel lit Matsumoto 松本' },
-  { name: '東急ステイ飛驒高山',          query: '東急ステイ飛騨高山' },
-  { name: '東急ステイ飛驒高山',          query: '東急ステイ飛騨高山' },
-  { name: '大吉屋3号館（日赤館）',       query: '大吉屋3号館 日赤館 名古屋' },
-  null, // 10/06 回程日，無住宿
-]
 
 // 每日路線總覽：大點依序排列，方位依真實地理相對關係手繪示意（非精確比例）；
 // 每天第一站是前一晚住宿地，Day1 是抵達日故從機場開始
@@ -393,9 +416,12 @@ function useItems(day) {
   useEffect(() => {
     setLoading(true)
     setItems([])
-    try {
+    let cancelled = false
+    let unsub = () => {}
+    authReady.then(() => {
+      if (cancelled) return
       const r = ref(db, `itinerary/day${day}`)
-      const unsub = onValue(r, (snap) => {
+      unsub = onValue(r, (snap) => {
         const data = snap.val()
         setItems(
           data
@@ -406,9 +432,10 @@ function useItems(day) {
         )
         setLoading(false)
       }, () => setLoading(false))
-      return unsub
-    } catch {
-      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+      unsub()
     }
   }, [day])
 
@@ -479,7 +506,7 @@ export default function Itinerary() {
     const d = nowJST.getDate() - (nowJST.getHours() < 6 ? 1 : 0)
     if (d >= 1 && d <= 6) hotelIdx = d - 1
   }
-  const hotel = HOTELS[hotelIdx]
+  const hotel = useTonightHotel(hotelIdx)
 
   return (
     <div>
@@ -623,7 +650,7 @@ export default function Itinerary() {
             {/* 回宿：一鍵導航到今晚住宿 */}
             {hotel ? (
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotel.query)}`}
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotel.destination)}`}
                 target="_blank"
                 rel="noreferrer"
                 title={`導航到 ${hotel.name}`}

@@ -1,4 +1,51 @@
+import { useState, useEffect } from 'react'
+import { ref, onValue } from 'firebase/database'
+import { db, authReady } from '../../firebase'
+import { DAY_INFO } from '../../utils/dayInfo'
+
+// 住宿總覽直接即時讀 Firebase itinerary/day{n} 裡 tag 為「住宿」的項目，
+// 跟「行程」頁、浮動卡「回宿」按鈕共用同一份資料，改行程時這裡會自動跟著變。
+function useAccommodationOverview() {
+  const [stays, setStays] = useState(null) // null = 讀取中
+
+  useEffect(() => {
+    let cancelled = false
+    let unsub = () => {}
+    authReady.then(() => {
+      if (cancelled) return
+      const r = ref(db, 'itinerary')
+      unsub = onValue(r, (snap) => {
+        const data = snap.val() || {}
+        const result = DAY_INFO.map((info, i) => {
+          const dayItems = data[`day${i + 1}`]
+          const stay = dayItems && Object.values(dayItems).find(v => v.tag === '住宿')
+          return stay ? { ...info, name: stay.title.replace(/^入住[:：]\s*/, '') } : null
+        }).filter(Boolean)
+        setStays(result)
+      }, () => setStays([]))
+    })
+    return () => { cancelled = true; unsub() }
+  }, [])
+
+  return stays
+}
+
+// 連續兩晚住同一家飯店時，合併成一行「10/03–04」顯示
+function mergeConsecutiveStays(stays) {
+  return stays.reduce((acc, cur) => {
+    const prev = acc[acc.length - 1]
+    if (prev && prev.name === cur.name) {
+      prev.date = `${prev.date}–${cur.date.split('/')[1]}`
+    } else {
+      acc.push({ ...cur })
+    }
+    return acc
+  }, [])
+}
+
 export default function Tools() {
+  const accommodations = useAccommodationOverview()
+
   return (
     <div className="px-6 py-6 space-y-8 pb-32 font-sans md:px-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-10 md:pb-24 md:items-start">
 
@@ -37,12 +84,9 @@ export default function Tools() {
           ✦ Accommodation
         </h3>
         <ul className="space-y-4 text-sm">
-          {[
-            { date: '10/01', city: '名古屋', name: 'ixyz杜' },
-            { date: '10/02', city: '松本', name: 'Tabino Hotel lit Matsumoto' },
-            { date: '10/03–04', city: '高山', name: '高山 東急ステイ 飛驒高山' },
-            { date: '10/05', city: '名古屋', name: '大吉屋3号館（日赤館）' },
-          ].map(({ date, city, name }) => (
+          {accommodations === null ? (
+            <li className="h-16 bg-[#F4F1EB] rounded-xl animate-pulse" />
+          ) : mergeConsecutiveStays(accommodations).map(({ date, city, name }) => (
             <li key={date} className="flex justify-between items-start border-b border-dashed border-gray-100 pb-3 last:border-0 last:pb-0">
               <div>
                 <div className="text-[0.62rem] text-gray-400">{date} {city}</div>

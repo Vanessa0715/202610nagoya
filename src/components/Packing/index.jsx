@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ref, onValue, remove } from 'firebase/database'
-import { db } from '../../firebase'
+import { db, authReady } from '../../firebase'
 import { X, Check, ChevronRight } from 'lucide-react'
 
 const DEFAULT_CATEGORIES = ['證件', '衣物', '盥洗', '電子', '藥品', '其他']
@@ -67,9 +67,12 @@ function usePacking() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
+    let cancelled = false
+    let unsub = () => {}
+    authReady.then(() => {
+      if (cancelled) return
       const r = ref(db, 'packing')
-      const unsub = onValue(r, (snap) => {
+      unsub = onValue(r, (snap) => {
         const data = snap.val()
         if (data) {
           const list = Object.entries(data).map(([id, val]) => ({ id, ...val }))
@@ -79,9 +82,10 @@ function usePacking() {
         }
         setLoading(false)
       }, () => setLoading(false))
-      return unsub
-    } catch {
-      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+      unsub()
     }
   }, [])
 

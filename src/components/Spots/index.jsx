@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ref, onValue, push, update as dbUpdate, set, remove } from 'firebase/database'
-import { db } from '../../firebase'
+import { db, authReady } from '../../firebase'
 import { parseArticles } from '../../utils/articles'
 import { Plus, X, MapPin, ExternalLink, CalendarPlus } from 'lucide-react'
 
@@ -36,9 +36,12 @@ function useSpots() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
+    let cancelled = false
+    let unsub = () => {}
+    authReady.then(() => {
+      if (cancelled) return
       const r = ref(db, 'spots')
-      const unsub = onValue(r, (snap) => {
+      unsub = onValue(r, (snap) => {
         const data = snap.val()
         if (data) {
           const list = Object.entries(data).map(([id, val]) => ({ id, ...val }))
@@ -48,9 +51,10 @@ function useSpots() {
         }
         setLoading(false)
       }, () => setLoading(false))
-      return unsub
-    } catch {
-      setLoading(false)
+    })
+    return () => {
+      cancelled = true
+      unsub()
     }
   }, [])
 
