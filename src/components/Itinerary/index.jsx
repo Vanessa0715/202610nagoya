@@ -4,16 +4,12 @@ import { ref, onValue, push, set, remove } from 'firebase/database'
 import { db, authReady } from '../../firebase'
 import { parseArticles } from '../../utils/articles'
 
-// 「回宿」導航目的地：優先用住宿項目的地址，其次從 mapUrl 的 query 參數還原，最後才退回標題
+// 「回宿」導航連結：優先直接用住宿項目貼的 Google 地圖連結（含短連結 maps.app.goo.gl 都準），
+// 改住宿時只要換掉 mapUrl 就會自動抓到新地點；沒貼連結才退回地址或標題組成導航搜尋
 function stayDestination(stay) {
-  if (stay.address) return stay.address
-  if (stay.mapUrl) {
-    try {
-      const q = new URL(stay.mapUrl).searchParams.get('query')
-      if (q) return q
-    } catch { /* mapUrl 不是合法網址就略過 */ }
-  }
-  return stay.title.replace(/^入住[:：]\s*/, '')
+  if (stay.mapUrl) return stay.mapUrl
+  const query = stay.address || stay.title.replace(/^入住[:：]\s*/, '')
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`
 }
 
 // 每天的「今晚住宿」直接即時讀 Firebase itinerary/day{n} 裡 tag 為「住宿」的項目，
@@ -698,7 +694,7 @@ export default function Itinerary() {
             {/* 回宿：一鍵導航到今晚住宿 */}
             {hotel ? (
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotel.destination)}`}
+                href={hotel.destination}
                 target="_blank"
                 rel="noreferrer"
                 title={`導航到 ${hotel.name}`}
