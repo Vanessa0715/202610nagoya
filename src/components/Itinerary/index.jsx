@@ -3,6 +3,7 @@ import { BedDouble } from 'lucide-react'
 import { ref, onValue, push, set, remove } from 'firebase/database'
 import { db, authReady } from '../../firebase'
 import { parseArticles } from '../../utils/articles'
+import DetailsText from '../DetailsText'
 
 // 「回宿」導航連結：優先直接用住宿項目貼的 Google 地圖連結（含短連結 maps.app.goo.gl 都準），
 // 改住宿時只要換掉 mapUrl 就會自動抓到新地點；沒貼連結才退回地址或標題組成導航搜尋
@@ -862,17 +863,7 @@ export default function Itinerary() {
                   <p className="text-[0.9rem] text-[#6B685C] leading-relaxed mb-6 whitespace-pre-line">{viewItem.notes}</p>
                 )}
 
-                {viewItem.details && (
-                  <div className="relative pl-5 space-y-4">
-                    <div className="absolute left-0 top-1 bottom-1 w-[1px] bg-gray-200" />
-                    {viewItem.details.split('\n').filter(l => l.trim()).map((line, idx) => (
-                      <div key={idx} className="relative text-[0.85rem] text-gray-600 leading-relaxed">
-                        <div className="absolute left-[-21px] top-2 w-2 h-2 rounded-full bg-[#C4BCAC]" />
-                        {line}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {viewItem.details && <DetailsText text={viewItem.details} />}
               </div>
             )}
 

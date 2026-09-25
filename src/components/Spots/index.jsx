@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ref, onValue, push, update as dbUpdate, set, remove } from 'firebase/database'
 import { db, authReady } from '../../firebase'
 import { parseArticles } from '../../utils/articles'
+import DetailsText from '../DetailsText'
 import { Plus, X, MapPin, ExternalLink, CalendarPlus } from 'lucide-react'
 
 const SPOT_TAGS = ['景點', '餐廳', '咖啡', '購物', '溫泉', '文化', '自然']
@@ -304,17 +305,7 @@ export default function Spots() {
                     <p className="text-[0.9rem] text-[#6B685C] leading-relaxed mb-6">{viewSpot.notes}</p>
                   )}
 
-                  {viewSpot.details && (
-                    <div className="relative pl-5 space-y-4 mb-6">
-                      <div className="absolute left-0 top-1 bottom-1 w-[1px] bg-gray-200" />
-                      {viewSpot.details.split('\n').filter(l => l.trim()).map((line, idx) => (
-                        <div key={idx} className="relative text-[0.85rem] text-gray-600 leading-relaxed">
-                          <div className="absolute left-[-21px] top-2 w-2 h-2 rounded-full bg-[#C4BCAC]" />
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {viewSpot.details && <DetailsText text={viewSpot.details} className="mb-6" />}
 
                   {hasLinks && (
                     <div className="flex flex-wrap gap-2.5 mt-2">
