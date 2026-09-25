@@ -1,6 +1,6 @@
 // 詳細內文：所見即所得。單換行＝同段換行，空一行＝新段落。
 // 「-----」分隔線顯示成細線；「3. 標題」這類短行（不以句號結尾）加粗當小標題；
-// 「- 項目」「• 項目」開頭的行加圓點並加粗；「【重點】」連框框一起加粗。
+// 「- 項目」「• 項目」開頭的行加圓點（不加粗）；「【重點】」連框框一起加粗。
 const SEPARATOR = /^[-–—=_─＝]{3,}$/
 const BULLET = /^(?:[-*]\s+|[•・]\s*)(\S.*)$/
 const HEADING =/^\d+[.、）)]\s*[^。]{1,30}$/
@@ -34,9 +34,9 @@ export default function DetailsText({ text, className = '' }) {
       nodes.push(<hr key={idx} className="my-4 border-0 border-t border-[#DDD6C8]" />)
     } else if (BULLET.test(line)) {
       nodes.push(
-        <div key={idx} className={`flex gap-2 font-bold text-[#43473F] ${gap || 'mt-2'}`}>
+        <div key={idx} className={`flex gap-2 ${gap || 'mt-2'}`}>
           <span className="mt-[0.6em] w-1.5 h-1.5 shrink-0 rounded-full bg-[#C4BCAC]" />
-          <span>{line.match(BULLET)[1]}</span>
+          <span>{renderInline(line.match(BULLET)[1])}</span>
         </div>
       )
     } else if (HEADING.test(line)) {
