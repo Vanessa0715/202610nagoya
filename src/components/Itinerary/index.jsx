@@ -651,13 +651,21 @@ export default function Itinerary() {
                   )}
                   <div className="w-[7px] h-[7px] rounded-full bg-sage mt-[9px] z-10 border-2 border-[#E9E5DE] shadow-[0_0_0_1.5px_#CBD2C9] group-hover:scale-125 transition-transform" />
                 </div>
-                <div className="flex-1 pl-4 pb-2 relative overflow-hidden">
+                <div className={`flex-1 pl-4 relative overflow-hidden ${item.image ? 'pb-16' : 'pb-2'}`}>
                   {item.tag && TAG_DECOR[item.tag] && (
                     <img
                       src={TAG_DECOR[item.tag].src}
                       alt=""
                       className={`absolute ${TAG_DECOR[item.tag].pos} pointer-events-none select-none opacity-20 z-0`}
                       style={{ width: TAG_DECOR[item.tag].size }}
+                    />
+                  )}
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt=""
+                      className="absolute inset-x-0 bottom-0 h-16 w-full object-cover opacity-25 pointer-events-none select-none z-0"
+                      style={{ maskImage: 'linear-gradient(to top, black 30%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to top, black 30%, transparent 100%)' }}
                     />
                   )}
                   <div className="relative">
